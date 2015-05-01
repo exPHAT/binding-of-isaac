@@ -26,6 +26,9 @@ if jCount > 0:
 
 screen = display.set_mode((WIDTH, HEIGHT))
 
+nextSong = ""
+
+
 def loadTexture(name):
 	# Load texture and double its size
 
@@ -41,8 +44,23 @@ def loadSound(name):
 
 	return s
 
-def loadMusic(name):
-	mixer.music.load(os.path.join('res', 'music', name))
+def playMusic(name, intro=""):
+	global nextSong
+
+	if os.name == "posix": # Mac (music is broken)
+		return
+
+	nextSong = ""
+
+	if len(intro) > 0:
+		mixer.music.load(os.path.join('res', 'music', intro))
+		mixer.music.play(0) # Play music once 
+
+		nextSong = name
+	else:
+		mixer.music.load(os.path.join('res', 'music', name))
+		mixer.music.play(-1)
+
 
 def loadFloor(name, index, size, sounds, textures):
 	d = xml.parse(os.path.join('res', 'floors', name)).getroot()
@@ -164,9 +182,8 @@ isaac = Character(WIDTH//2, (HEIGHT//4)*3, [[115, 100, 119, 97], [274, 275, 273,
 
 
 # Game music
-loadMusic("basementLoop.ogg")
+playMusic("titleScreenLoop.ogg", intro="titleScreenIntro.ogg")
 
-mixer.music.play()
 
 # Floor setup
 
@@ -265,6 +282,11 @@ while running:
 
 	if isaac.dead:
 		running = False
+
+	if nextSong != "":
+		if not mixer.music.get_busy():
+			mixer.music.load(nextSong)
+			mixer.music.play(-1)
 
 	# print(round(clock.get_fps(), 1), end="\r")
 
