@@ -41,6 +41,9 @@ def loadSound(name):
 
 	return s
 
+def loadMusic(name):
+	mixer.music.load(os.path.join('res', 'music', name))
+
 def loadFloor(name, index, size, sounds, textures):
 	d = xml.parse(os.path.join('res', 'floors', name)).getroot()
 
@@ -158,6 +161,12 @@ fonts = {
 
 # Isaac
 isaac = Character(WIDTH//2, (HEIGHT//4)*3, [[115, 100, 119, 97], [274, 275, 273, 276]], 1, 1, textures, sounds, fonts)
+
+
+# Game music
+loadMusic("basementLoop.ogg")
+
+mixer.music.play()
 
 # Floor setup
 
