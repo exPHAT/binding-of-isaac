@@ -22,6 +22,7 @@ class Animation:
 		self.height = int(self.height*percent)
 
 		self.frames = [transform.scale(self.frames[i], (self.width, self.height)) for i in range(len(self.frames))]
+		self.frame = self.frames[self.currentIndex]
 
 	def setInterval(self, interval):
 		self.interval = interval

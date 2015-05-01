@@ -78,7 +78,7 @@ class Room:
 				if typ in [1500, -1, -1, 1496, -1]:
 					self.poops.append(Poop([1500, -1, -1, 1496, -1].index(typ), (x,y), self.textures["poops"], self.sounds["pop"]))
 				elif typ == 1000:
-					self.rocks.append(Rock(0, (x,y), False, self.textures["rocks"]))
+					self.rocks.append(Rock(0, (x,y), False, self.sounds["rockBreak"], self.textures["rocks"]))
 				elif typ == 33:
 					self.fires.append(Fire(0, (x,y), [self.sounds["fireBurn"], self.sounds["steam"]], self.textures["fires"]))
 				elif typ == 5 and var == 20:
@@ -154,11 +154,13 @@ class Room:
 			for door in self.doors:
 				door.render(surface)
 
+			objects = self.rocks + self.poops + self.fires
+
 			for other in self.other[::-1]:
-					if not other.render(surface, currTime):
+					if not other.render(surface, currTime, objects):
 						self.other.remove(other)
 
-			everything = self.rocks+self.fires+self.poops+self.other
+			everything = objects+self.other
 
 			for enemy in self.enemies[:]:
 				if not enemy.render(surface, currTime, character, everything):
@@ -192,8 +194,10 @@ class Room:
 				for fire in self.fires:
 					fire.render(surface, currTime, ox=self.ax, oy=self.ay)
 
+				objects = self.rocks + self.poops + self.fires
+
 				for other in self.other[::-1]:
-					if not other.render(surface, currTime, ox=self.ax, oy=self.ay):
+					if not other.render(surface, currTime, objects, ox=self.ax, oy=self.ay):
 						self.other.remove(other)
 
 			return [0, 0]

@@ -49,12 +49,13 @@ def loadFloor(name, index, size, sounds, textures):
 
 
 	moves = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-	unusedRooms = [i for i in range(1, size)]
+	unusedRooms = [i for i in range(1, len(d))]
 	possibleCoords = moves[:]
 	rooms = [(0,0)]
 	for i in range(size-1):
 		chosen = choice(possibleCoords)
 		x, y = chosen
+		possibleCoords.remove(chosen)
 		for m in moves:
 			mx, my = m
 			if (x+mx, y+my) not in rooms:
@@ -64,6 +65,32 @@ def loadFloor(name, index, size, sounds, textures):
 		unusedRooms.remove(unusedRoom)
 		rooms.append(chosen)
 		floor[chosen] = Room(index, 0, chosen, d[unusedRoom], textures, sounds)
+
+	roomsWithOne = []
+
+	for room in possibleCoords:
+		x, y = room
+		count = 0
+		for m in moves:
+			mx, my = m
+			newCoords = (x+mx, y+my)
+			
+			if newCoords in rooms:
+				count += 1
+
+		if count == 1:
+			roomsWithOne.append(room)
+
+
+
+
+	itemRoom = choice(roomsWithOne)
+	roomsWithOne.remove(itemRoom)
+	floor[itemRoom] = Room(index, 1, chosen, d[0], textures, sounds)
+
+	bossRoom = choice(roomsWithOne)
+	roomsWithOne.remove(bossRoom)
+	floor[bossRoom] = Room(index, 2, chosen, d[0], textures, sounds)
 
 	return floor
 
@@ -121,6 +148,7 @@ sounds = {
 	"keyPickup": loadSound("keyPickup.wav"),
 	"heartIntake": loadSound("heartIntake.wav"),
 	"holy": loadSound("holy.wav"),
+	"rockBreak": loadSound("rockBreak.wav"),
 }
 
 # Load fonts
@@ -133,7 +161,7 @@ isaac = Character(WIDTH//2, (HEIGHT//4)*3, [[115, 100, 119, 97], [274, 275, 273,
 
 # Floor setup
 
-floorSeed = "FUCKFUCK"
+floorSeed = "YOYOYOYO"
 
 seed(floorSeed)
 
@@ -188,6 +216,8 @@ while running:
 					floor[currentRoom].other.append(Bomb(floor[currentRoom], 0, ((isaac.x-GRIDX)/GRATIO, (isaac.y-GRIDY)/GRATIO), [sounds["explosion"]], textures["bombs"]))
 			elif e.unicode == "t":
 				isaac.pickups[1].add(3)
+			elif e.unicode == "h":
+				isaac.hurt(1, 0, 0, currTime)
 			# else:
 			# 	print(e)
 

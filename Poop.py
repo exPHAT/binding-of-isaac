@@ -33,8 +33,10 @@ class Poop:
 		self.destroyed = False
 
 	def destroy(self):
-		self.destroyed = True
-		self.sound.play()
+		if not self.destroyed:
+			self.destroyed = True
+			self.texture = self.textures[-1]
+			self.sound.play()
 
 	def hurt(self, ammount):
 		self.health -= 1

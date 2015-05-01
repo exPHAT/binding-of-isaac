@@ -26,6 +26,7 @@ class Fly(Enemy):
 
 		ix, iy = (character.x-GRIDX)/GRATIO, (character.y-GRIDY)/GRATIO
 
+
 		dx, dy = (ix-self.x), (iy-self.y)
 
 		something = sqrt(dx**2+dy**2)
@@ -50,7 +51,9 @@ class Fly(Enemy):
 					self.die()
 
 			if abs(dx) < 0.8 and abs(dy) < 0.8:
-				character.hurt(1, time)
+				fx, fy = (GRIDX+GRATIO*self.x, GRIDY+GRATIO*self.y)
+
+				character.hurt(1, fx, fy, time)
 
 			frame = self.anim.render(time)
 		else:

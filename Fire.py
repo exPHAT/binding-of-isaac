@@ -42,6 +42,7 @@ class Fire:
 	def destroy(self):
 		self.destroyed = True
 		self.sounds[1].play() # Extinguish sound
+		self.health = 0
 
 	def hurt(self, ammount):
 		self.health -= 1

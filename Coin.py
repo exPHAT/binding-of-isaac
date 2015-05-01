@@ -27,7 +27,7 @@ class Coin:
 		self.pickedUp = True
 		self.sounds[1].play()
 
-	def render(self, surface, time, ox=0, oy=0):
+	def render(self, surface, time, objects, ox=0, oy=0):
 		if not self.pickedUp:
 			surface.blit(self.anim.render(time), (GRIDX+GRATIO*self.x+GRATIO//2-self.anim.width//2+ox,GRIDY+GRATIO*self.y+GRATIO//2-self.anim.height//2+oy))
 		return not self.pickedUp

@@ -23,7 +23,7 @@ class Key:
 		self.pickedUp = True
 		self.sounds[1].play()
 
-	def render(self, surface, time, ox=0, oy=0):
+	def render(self, surface, time, objects, ox=0, oy=0):
 		if not self.pickedUp:
 			# draw.rect(surface, (255,0,0), self.bounds)
 			surface.blit(self.texture, (GRIDX+GRATIO*self.x+ox,GRIDY+GRATIO*self.y+oy))

@@ -28,7 +28,7 @@ class Heart:
 		self.pickedUp = True
 		self.sound.play()
 
-	def render(self, surface, time, ox=0, oy=0):
+	def render(self, surface, time, objects, ox=0, oy=0):
 		if not self.pickedUp:
 			# draw.rect(surface, (255,0,0), self.bounds)
 			surface.blit(self.texture, (GRIDX+GRATIO*self.x-self.width//4+ox,GRIDY+GRATIO*self.y-self.height//4+oy))

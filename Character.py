@@ -1,5 +1,6 @@
 from pygame import *
 from random import randint
+from math import *
 from const import GRATIO
 from UIHeart import *
 from Tear import *
@@ -129,7 +130,7 @@ class Character:
 	def clearTears(self):
 		self.tears = []
 
-	def hurt(self, ammount, time):
+	def hurt(self, ammount, enemyX, enemyY, time):
 
 		if time-self.lastHurt < 1:
 			return
@@ -148,6 +149,16 @@ class Character:
 					if i == 0 and self.hearts[i].health == 1:
 						self.dead = True
 					leftover = self.hearts[i].damage(leftover)
+
+		# Isaac push back
+		if enemyX != None and enemyY != None:
+			dx, dy = ((enemyX-self.x)*-1, (enemyY-self.y)*-1)
+			angle = atan2(dy, dx)
+
+			pConst = 2
+
+			self.xVel += pConst*cos(angle)
+			self.yVel += pConst*sin(angle)
 
 		self.lastHurt = time
 
@@ -374,7 +385,7 @@ class Character:
 			rockColY = rcy
 			if rcx or rcy:
 				if type(ob) == Fire:
-					self.hurt(1, time)
+					self.hurt(1, None, None, time)
 				elif type(ob) == Coin:
 					self.pickups[0].add(ob.worth)
 					ob.pickup()
