@@ -28,9 +28,12 @@ screen = display.set_mode((WIDTH, HEIGHT))
 
 nextSong = ""
 
-
-def loadTexture(name):
+def loadTexture(name, directory=""):
 	# Load texture and double its size
+
+	if directory != "":
+		t = image.load(os.path.join('res', 'textures', directory, name))
+		return t
 
 	t = image.load(os.path.join('res','textures', name))
 
@@ -56,7 +59,7 @@ def playMusic(name, intro=""):
 		mixer.music.load(os.path.join('res', 'music', intro))
 		mixer.music.play(0) # Play music once 
 
-		nextSong = name
+		nextSong = os.path.join('res', 'music', name)
 	else:
 		mixer.music.load(os.path.join('res', 'music', name))
 		mixer.music.play(-1)
@@ -120,6 +123,164 @@ def loadCFont(name, width, height, total):
 	digits = [transform.scale(f.subsurface(width*i, 0, width, height), (width*2, height*2)) for i in range(total)]
 
 	return digits
+
+def menu():
+	running = True
+	arrowpoint = 0
+	rotate = 50
+	spotlight = 0
+	total = 80
+	arrowlocation = [(310,147),(315,255),(330,370)]
+	swap = False
+	menu = "main"
+	select = Rect(400,200,200,245)
+	loadingimage = loadTexture("loadingimage.jpg", directory="menu")
+	loadingimage.set_alpha(None)
+
+	for x in range(0,50):
+		time.wait(60)
+		loadingimage.set_alpha(x)
+		screen.blit(loadingimage,(0,0))
+		display.flip()
+
+	menuoverlay = loadTexture("menuoverlay.png", directory="menu")
+	menuoverlay2 = loadTexture("menuoverlay2.png", directory="menu")
+	mainbackground = loadTexture("mainbackground.png", directory="menu")
+	file = loadTexture("file.png", directory="menu")
+	issac = loadTexture("issac.png", directory="menu")
+	maintitle = loadTexture("maintitle.png", directory="menu")
+	arrow = loadTexture("arrow.png", directory="menu")
+	selectspotlight = [None,None]
+	selectspotlight[0] = loadTexture("fileselect1.png", directory="menu")
+	selectspotlight[1] = loadTexture("fileselect2.png", directory="menu")
+	filespotlight = [None,None]
+	filespotlight[0] = loadTexture("filespotlight1.png", directory="menu")
+	filespotlight[1] = loadTexture("filespotlight2.png", directory="menu")
+	spotlightcry = [None,None]
+	spotlightcry[0] = loadTexture("spotlightcry1.png", directory="menu")
+	spotlightcry[1] = loadTexture("spotlightcry2.png", directory="menu")
+	controloverlay = loadTexture("controloverlay.png", directory="menu")
+	fileunselect = loadTexture("fileunselect.png", directory="menu")
+
+	screen.blit(mainbackground,(0,0))
+	display.flip()
+	degrees = -1
+	increase = -0.05
+	frame2 = 0
+
+	clock = time.Clock()
+
+	while running:
+		frame = time.get_ticks()
+		mb = mouse.get_pressed()
+		kd = key.get_pressed()
+		mx,my = mouse.get_pos()
+		if (frame - frame2) > 120:           
+			spotlight += 1
+			frame2 = frame
+			if spotlight > 1:
+				spotlight = 0
+		for e in event.get():
+			if e.type == QUIT:
+				running = False
+
+			if e.type == KEYDOWN and menu == "selection" and e.key == 273:
+				arrowpoint -= 1
+
+			elif e.type == KEYDOWN and menu == "selection" and e.key == 274:
+				arrowpoint += 1
+
+			if arrowpoint > 2:
+				arrowpoint = 0
+
+			elif arrowpoint < 0:
+				arrowpoint = 2
+
+			if menu == "selection" and e.type == KEYDOWN and e.key == 27:     
+				menu = "file"
+				for x in range(0,960,70):
+					screen.blit(mainbackground,(-960+x,-540))
+					screen.blit(slide,(0+x,0))
+					screen.blit(menuoverlay2,(0,0))
+					display.flip()
+				continue
+
+			elif menu == "main" and e.type == KEYDOWN and e.key == 32:
+				menu = "file"
+				for x in range(0,540,40):
+					screen.blit(mainbackground,(0,0-x))
+					screen.blit(slide,(0,0-x))
+					screen.blit(menuoverlay,(0,0))
+					screen.blit(controloverlay,(0,540-x))
+					display.flip()
+				continue
+
+			elif  menu == "file" and e.type == KEYDOWN and e.key == 27:          
+				menu = "main"
+				for x in range(0,540,40):
+					screen.blit(mainbackground,(0,-540+x))
+					screen.blit(slide,(0,0+x))
+					screen.blit(menuoverlay,(0,0))
+					screen.blit(controloverlay,(0,0+x))
+					display.flip()
+				continue
+
+			elif menu == "file" and e.type == KEYDOWN and e.key == 32:
+				menu = "selection"
+				for x in range(0,960,70):
+					screen.blit(mainbackground,(0-x,-540))
+					screen.blit(slide,(0-x,0))
+					screen.blit(file,(320-x,total))
+					screen.blit(selectspotlight[spotlight],(320-x,total))
+					screen.blit(menuoverlay2,(0,0))
+					display.flip()
+				continue
+
+		if menu == "main":
+			if degrees < -2:
+				increase *= -1
+			elif degrees > 2:
+				increase *= -1            
+			screen.blit(mainbackground,(0,0))
+			screen.blit(spotlightcry[spotlight],(270,140))
+			rottitle = transform.rotate(maintitle, degrees)
+			screen.blit(rottitle,(90,50))
+			degrees += increase
+			slide = screen.copy()
+			screen.blit(menuoverlay,(0,0))
+			
+		elif menu == "file":
+			screen.blit(mainbackground,(0,-540)) 
+			if select.collidepoint(mx,my):
+				if total == 15:
+					total = 20
+				total -= 5
+				screen.blit(file,(320,total))
+				screen.blit(file,(320,total))
+				screen.blit(selectspotlight[spotlight],(320,total))
+				slide = screen.copy()
+				screen.blit(menuoverlay2,(0,0))
+			else:
+				if total == 80:
+					total = 75
+				total += 5
+				screen.blit(fileunselect,(320,total))
+				screen.blit(filespotlight[spotlight],(320,total))
+				slide = screen.copy()
+				screen.blit(menuoverlay2,(0,0))
+			
+		elif menu == "selection":
+			screen.blit(mainbackground,(-960,-540))
+			screen.blit(arrow,arrowlocation[arrowpoint])
+			slide = screen.copy()
+			screen.blit(menuoverlay2,(0,0))
+			running = False
+			
+			
+		clock.tick(60)
+		display.flip()
+
+	return 0, "YOLOSWAG"
 
 display.set_caption("The Binding of Isaac: Rebirth")
 display.set_icon(image.load(os.path.join('res','textures', 'isaac.png')))
@@ -185,9 +346,9 @@ isaac = Character(WIDTH//2, (HEIGHT//4)*3, [[115, 100, 119, 97], [274, 275, 273,
 playMusic("titleScreenLoop.ogg", intro="titleScreenIntro.ogg")
 
 
-# Floor setup
+characterType, floorSeed = menu()
 
-floorSeed = "YOYOYOYO"
+# Floor setup
 
 seed(floorSeed)
 
@@ -239,7 +400,7 @@ while running:
 				isaac.hurt(1, currTime)
 			elif e.unicode == "e":
 				if isaac.pickups[1].use(1):
-					floor[currentRoom].other.append(Bomb(floor[currentRoom], 0, ((isaac.x-GRIDX)/GRATIO, (isaac.y-GRIDY)/GRATIO), [sounds["explosion"]], textures["bombs"]))
+					floor[currentRoom].other.append(Bomb(floor[currentRoom], 0, ((isaac.x-GRIDX)/GRATIO, (isaac.y-GRIDY)/GRATIO), [sounds["explosion"]], textures["bombs"], explode=True))
 			elif e.unicode == "t":
 				isaac.pickups[1].add(3)
 			elif e.unicode == "h":

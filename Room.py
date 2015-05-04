@@ -10,6 +10,7 @@ from Coin import *
 from Key import *
 from Fly import *
 from Heart import *
+from Bomb import *
 
 class Room:
 	"""The main floor class"""
@@ -81,12 +82,14 @@ class Room:
 					self.rocks.append(Rock(0, (x,y), False, self.sounds["rockBreak"], self.textures["rocks"]))
 				elif typ == 33:
 					self.fires.append(Fire(0, (x,y), [self.sounds["fireBurn"], self.sounds["steam"]], self.textures["fires"]))
+				elif typ == 5 and var == 10:
+					self.other.append(Heart([1,3,6].index(subtype), (x,y), [self.sounds["heartIntake"], self.sounds["holy"]], self.textures["pickupHearts"]))
 				elif typ == 5 and var == 20:
 					self.other.append(Coin(subtype-1, (x,y), [self.sounds["coinDrop"], self.sounds["coinPickup"]], self.textures["coins"]))
 				elif typ == 5 and var == 30:
 					self.other.append(Key(0, (x, y), [self.sounds["keyDrop"], self.sounds["keyPickup"]], self.textures["keys"]))
-				elif typ == 5 and var == 10:
-					self.other.append(Heart([1,3,6].index(subtype), (x,y), [self.sounds["heartIntake"], self.sounds["holy"]], self.textures["pickupHearts"]))
+				elif typ == 5 and var == 40:
+					self.other.append(Bomb(self, 0, (x, y), [self.sounds["explosion"]], self.textures["bombs"], explode=False))
 				elif typ == 13:
 					self.enemies.append(Fly((x, y), None, self.textures["enemies"]["fly"]))
 

@@ -9,6 +9,7 @@ from Coin import *
 from Key import *
 from Pickup import *
 from Heart import *
+from Bomb import *
 
 class Character:
 	"""The main class for Isaac"""
@@ -57,6 +58,12 @@ class Character:
 
 		self.head = self.heads[0]
 		self.body = self.feet[0][0]
+
+
+		self.specialFrames = [self.textures.subsurface(i*128, 272+128, 128, 128) for i in range(1, 3)]
+		self.specialFrame = 0
+
+		self.lastPickup = 0
 
 		# Animation setup
 		self.interval = .06
@@ -161,6 +168,8 @@ class Character:
 			self.yVel += pConst*sin(angle)
 
 		self.lastHurt = time
+
+		self.specialFrame = 2
 
 		if self.hearts[0].health == 0:
 			self.die()
@@ -343,6 +352,12 @@ class Character:
 			self.lastAnimate = time
 			self.step(time)
 
+		if self.specialFrame == 2 and time-self.lastHurt >= 0.22:
+			self.specialFrame = 0
+		elif self.specialFrame == 1 and time-self.lastPickup >= 0.5:
+			self.specialFrame = 0
+
+
 		if self.lastTearKey in self.lastTearKeys and time-self.lastTear >= (8-self.shotRate)/18:
 			self.tears.append(Tear(self.lastTearKey, (self.x, self.y-20), (self.xVel*1.5, self.yVel*1.5), self.shotSpeed, self.damage, self.range, True, self.tearTextures, self.tearSounds))
 			self.lastTear = time
@@ -392,6 +407,9 @@ class Character:
 				elif type(ob) == Key:
 					self.pickups[2].add(1)
 					ob.pickup()
+				elif type(ob) == Bomb and not ob.shouldExplode:
+					self.pickups[1].add(1)
+					ob.pickup()
 				elif type(ob) == Heart:
 					amm = self.heal(ob.health, ob.variant)
 					if amm == 0:
@@ -399,6 +417,10 @@ class Character:
 					elif type(amm) == int:
 						self.hearts.append(UIHeart(ob.variant, amm, self.heartTextures))
 					ob.pickup()
+
+					if ob.variant == 1: # Sould heart
+						self.specialFrame = 1
+						self.lastPickup = time
 
 				if not ob.collideable:
 					rockColX = rockColY = False
@@ -435,8 +457,11 @@ class Character:
 
 		self.updateVel()
 		
-		surface.blit(self.body, (self.x-32, self.y-32))
-		surface.blit(self.head, (self.x-32, self.y-32-20))
+		if self.specialFrame == 0:
+			surface.blit(self.body, (self.x-32, self.y-32))
+			surface.blit(self.head, (self.x-32, self.y-32-20))
+		else:
+			surface.blit(self.specialFrames[self.specialFrame-1], (self.x-64, self.y-64))
 
 		for tear in self.tears[:]:
 			if not tear.render(surface, time, bounds, obsticals):
