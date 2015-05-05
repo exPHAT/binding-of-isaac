@@ -27,6 +27,7 @@ if jCount > 0:
 screen = display.set_mode((WIDTH, HEIGHT))
 
 nextSong = ""
+changeSong = -1
 
 def loadTexture(name, dir=""):
 	# Load texture and double its size
@@ -48,18 +49,22 @@ def loadSound(name):
 	return s
 
 def playMusic(name, intro=""):
-	global nextSong
+	global nextSong, changeSong
 
 	if os.name == "posix": # Mac (music is broken)
 		return
 
 	nextSong = ""
+	changeSong = -1
 
 	if len(intro) > 0:
-		mixer.music.load(os.path.join('res', 'music', intro))
+		intro = os.path.join('res', 'music', intro)
+		mixer.music.load(intro)
 		mixer.music.play(0) # Play music once 
 
 		nextSong = os.path.join('res', 'music', name)
+		changeSong = mixer.Sound(intro).get_length() - 0.05
+
 	else:
 		mixer.music.load(os.path.join('res', 'music', name))
 		mixer.music.play(-1)
@@ -124,7 +129,20 @@ def loadCFont(name, width, height, total):
 
 	return digits
 
+def generateSeed():
+	SEED_LENGTH = 8
+	characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	charLen = len(characters)
+	finalSeed = ""
+
+	for i in range(SEED_LENGTH):
+		finalSeed += characters[randint(0, SEED_LENGTH)]
+
+	return finalSeed
+
 def menu():
+	global nextSong, changeSong
+
 	running = True
 	arrowpoint = 0
 	rotate = 50
@@ -253,7 +271,6 @@ def menu():
 					total = 20
 				total -= 5
 				screen.blit(file,(320,total))
-				screen.blit(file,(320,total))
 				screen.blit(selectspotlight[spotlight],(320,total))
 				slide = screen.copy()
 				screen.blit(menuoverlay2,(0,0))
@@ -272,11 +289,17 @@ def menu():
 			slide = screen.copy()
 			screen.blit(menuoverlay2,(0,0))
 			
-			
+		if nextSong != "" and changeSong != -1:
+			if mixer.music.get_pos()/1000 >= changeSong:
+				mixer.music.load(nextSong)
+				mixer.music.play(-1)
+				nextSong = ""
+				changeSong = -1
+
 		clock.tick(60)
 		display.flip()
 
-	return 0, "YOLOSWAG"
+	return 0, generateSeed()
 
 display.set_caption("The Binding of Isaac: Rebirth")
 display.set_icon(image.load(os.path.join('res','textures', 'isaac.png')))
