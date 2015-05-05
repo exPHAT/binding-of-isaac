@@ -28,11 +28,11 @@ screen = display.set_mode((WIDTH, HEIGHT))
 
 nextSong = ""
 
-def loadTexture(name, directory=""):
+def loadTexture(name, dir=""):
 	# Load texture and double its size
 
-	if directory != "":
-		t = image.load(os.path.join('res', 'textures', directory, name))
+	if dir != "":
+		t = image.load(os.path.join('res', 'textures', dir, name))
 		return t
 
 	t = image.load(os.path.join('res','textures', name))
@@ -134,39 +134,33 @@ def menu():
 	swap = False
 	menu = "main"
 	select = Rect(400,200,200,245)
-	loadingimage = loadTexture("loadingimage.jpg", directory="menu")
-	loadingimage.set_alpha(None)
 
-	for x in range(0,50):
-		time.wait(60)
-		loadingimage.set_alpha(x)
-		screen.blit(loadingimage,(0,0))
-		display.flip()
-
-	menuoverlay = loadTexture("menuoverlay.png", directory="menu")
-	menuoverlay2 = loadTexture("menuoverlay2.png", directory="menu")
-	mainbackground = loadTexture("mainbackground.png", directory="menu")
-	file = loadTexture("file.png", directory="menu")
-	issac = loadTexture("issac.png", directory="menu")
-	maintitle = loadTexture("maintitle.png", directory="menu")
-	arrow = loadTexture("arrow.png", directory="menu")
+	menuoverlay = loadTexture("menuoverlay.png", dir="menu")
+	menuoverlay2 = loadTexture("menuoverlay2.png", dir="menu")
+	mainbackground = loadTexture("mainbackground.png", dir="menu")
+	file = loadTexture("file.png", dir="menu")
+	issac = loadTexture("issac.png", dir="menu")
+	maintitle = loadTexture("maintitle.png", dir="menu")
+	arrow = loadTexture("arrow.png", dir="menu")
 	selectspotlight = [None,None]
-	selectspotlight[0] = loadTexture("fileselect1.png", directory="menu")
-	selectspotlight[1] = loadTexture("fileselect2.png", directory="menu")
+	selectspotlight[0] = loadTexture("fileselect1.png", dir="menu")
+	selectspotlight[1] = loadTexture("fileselect2.png", dir="menu")
 	filespotlight = [None,None]
-	filespotlight[0] = loadTexture("filespotlight1.png", directory="menu")
-	filespotlight[1] = loadTexture("filespotlight2.png", directory="menu")
+	filespotlight[0] = loadTexture("filespotlight1.png", dir="menu")
+	filespotlight[1] = loadTexture("filespotlight2.png", dir="menu")
 	spotlightcry = [None,None]
-	spotlightcry[0] = loadTexture("spotlightcry1.png", directory="menu")
-	spotlightcry[1] = loadTexture("spotlightcry2.png", directory="menu")
-	controloverlay = loadTexture("controloverlay.png", directory="menu")
-	fileunselect = loadTexture("fileunselect.png", directory="menu")
+	spotlightcry[0] = loadTexture("spotlightcry1.png", dir="menu")
+	spotlightcry[1] = loadTexture("spotlightcry2.png", dir="menu")
+	controloverlay = loadTexture("controloverlay.png", dir="menu")
+	fileunselect = loadTexture("fileunselect.png", dir="menu")
 
 	screen.blit(mainbackground,(0,0))
 	display.flip()
 	degrees = -1
 	increase = -0.05
 	frame2 = 0
+
+	playMusic("titleScreenLoop.ogg", intro="titleScreenIntro.ogg")
 
 	clock = time.Clock()
 
@@ -235,6 +229,9 @@ def menu():
 					screen.blit(menuoverlay2,(0,0))
 					display.flip()
 				continue
+			elif menu == "selection" and e.type == KEYDOWN and e.key == 32:
+				if arrowpoint == 0:
+					running = False
 
 		if menu == "main":
 			if degrees < -2:
@@ -274,7 +271,6 @@ def menu():
 			screen.blit(arrow,arrowlocation[arrowpoint])
 			slide = screen.copy()
 			screen.blit(menuoverlay2,(0,0))
-			running = False
 			
 			
 		clock.tick(60)
@@ -341,11 +337,6 @@ fonts = {
 # Isaac
 isaac = Character(WIDTH//2, (HEIGHT//4)*3, [[115, 100, 119, 97], [274, 275, 273, 276]], 1, 1, textures, sounds, fonts)
 
-
-# Game music
-playMusic("titleScreenLoop.ogg", intro="titleScreenIntro.ogg")
-
-
 characterType, floorSeed = menu()
 
 # Floor setup
@@ -382,6 +373,8 @@ animatingRooms = []
 currTime = 0
 
 clock = time.Clock()
+
+playMusic("basementLoop.ogg", intro="basementIntro.ogg")
 
 running = True
 while running:
