@@ -169,7 +169,7 @@ class Room:
 				if not enemy.render(surface, currTime, character, everything):
 					self.enemies.remove(enemy)
 
-			move = character.render(surface, currTime, self.levelBounds, everything)
+			move = character.render(surface, currTime, self.levelBounds, everything, self.doors)
 
 			return move
 		else:

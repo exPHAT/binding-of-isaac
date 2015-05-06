@@ -45,6 +45,15 @@ class Door:
 		self.xOff = [0, 6, 0, 48][self.side]
 		self.yOff = [-48, -52, -6, -52][self.side]
 
+		if side == 0:
+			self.rect = Rect(468,436,22,32)
+		elif side == 1:
+			self.rect = Rect(806,252,32,22)
+		elif side == 2:
+			self.rect = Rect(470,68,22,32)
+		elif side == 3:
+			self.rect = Rect(122,251,32,22)
+
 
 	def close(self):
 		self.open = False

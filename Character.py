@@ -100,13 +100,6 @@ class Character:
 		self.shotSpeed = 1
 		self.luck = 1
 
-		self.doorRects = [
-			Rect(468,436,22,32),
-			Rect(806,252,32,22),
-			Rect(470,68,22,32),
-			Rect(122,251,32,22),
-		]
-
 		self.items = []
 
 	def heal(self, ammount, variant):
@@ -345,7 +338,7 @@ class Character:
 			self.head = self.heads[self.lastTearKeys[-1]]
 
 
-	def render(self, surface, time, bounds, obsticals):
+	def render(self, surface, time, bounds, obsticals, doors):
 		move = [0,0] # Which direction on the map to move
 
 		if time-self.lastAnimate >= self.interval:
@@ -429,9 +422,10 @@ class Character:
 		mx = [0, 1, 0, -1]
 		my = [-1, 0, 1, 0]
 
-		for i in range(len(self.doorRects)):
-			dcx = self.doorRects[i].collidepoint(self.x+dx, self.y)
-			dcy = self.doorRects[i].collidepoint(self.x, self.y+dy)
+		for i in range(len(doors)):
+			door = doors[i].rect
+			dcx = door.collidepoint(self.x+dx, self.y)
+			dcy = door.collidepoint(self.x, self.y+dy)
 
 			if dcx:
 				self.x += dx
@@ -439,15 +433,17 @@ class Character:
 			if dcy:
 				self.y += dy
 
+			side = doors[i].side
+
 			if not dcx or not dcy:
 				if sum(map(int, [
-						mx[i] < 0 and self.doorRects[i].x-(self.x+dx) > 0,
-						mx[i] > 0 and self.doorRects[i].x+self.doorRects[i].w-(self.x+dx) < 0,
-						my[i] > 0 and self.doorRects[i].y-(self.y+dy) > 0,
-						my[i] < 0 and self.doorRects[i].y+self.doorRects[i].h-(self.y+dy) < 0,
+						mx[side] < 0 and door.x-(self.x+dx) > 0,
+						mx[side] > 0 and door.x+door.w-(self.x+dx) < 0,
+						my[side] > 0 and door.y-(self.y+dy) > 0,
+						my[side] < 0 and door.y+door.h-(self.y+dy) < 0,
 					])) == 1:
-					move[0] = mx[i]
-					move[1] = my[i]
+					move[0] = mx[side]
+					move[1] = my[side]
 					break
 
 
