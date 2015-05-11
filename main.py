@@ -29,19 +29,26 @@ screen = display.set_mode((WIDTH, HEIGHT))
 nextSong = ""
 changeSong = -1
 
-def loadTexture(name, dir=""):
+def loadTexture(name, dir="", double=True):
 	# Load texture and double its size
 
 	if dir != "":
 		t = image.load(os.path.join('res', 'textures', dir, name))
-		return t
 
-	t = image.load(os.path.join('res','textures', name))
+	else:
+		t = image.load(os.path.join('res','textures', name))
+
+	w = t.get_width()
+	h = t.get_height()
+
+	if double:
+		w *= 2
+		h *= 2
 
 	if False:
 		return transform.scale2x(t)
 	else:
-		return transform.scale(t, (t.get_width()*2, t.get_height()*2))
+		return transform.scale(t, (w, h))
 
 def loadSound(name):
 	s = mixer.Sound(os.path.join('res','sounds', name))
@@ -91,51 +98,57 @@ def generateSeed():
 def menu():
 	global nextSong, changeSong
 
-	loaded = False
-	running = True
+	running = True 
 	arrowpoint = 0
 	rotate = 50
 	spotlight = 0
-	total = 80
-	arrowlocation = [(310,147),(315,255),(330,370)]
+	total1 = 50
+	total2 = 50
+	total3 = 50
+	space = 1
+	arrowselectionlocation = [(335,120),(350,245),(350,380)]
 	swap = False
 	menu = "main"
-	select = Rect(400,200,200,245)
+	filepoint = 0
 
-	menuoverlay = loadTexture("menuoverlay.png", dir="menu")
-	menuoverlay2 = loadTexture("menuoverlay2.png", dir="menu")
+	def darken(image, ammount):
+		nImage = image.copy()
+		ammount = int(ammount*255)
+		dark = Surface(nImage.get_size())
+		dark.set_alpha(ammount, RLEACCEL)
+		nImage.blit(dark, (0,0))
+		pa = PixelArray(nImage)
+		pa.replace((0,0,0,ammount), (0,0,0,0))
+		return pa.make_surface()
 
-
-
-	mainbackground = loadTexture("mainbackground.png", dir="menu")
-	file = loadTexture("file.png", dir="menu")
-	issac = loadTexture("issac.png", dir="menu")
+	menuoverlay = loadTexture("menuoverlay.png", dir="menu", double=False)
+	menuoverlay2 = loadTexture("menuoverlay2.png", dir="menu", double=False)
+	mainbackground = loadTexture("mainbackground.png", dir="menu").convert()
+	delete = loadTexture("delete.png", dir="menu")
+	unselectdelete = darken(delete,0.5)
+	file = [None,None,None]
+	unselectfile = [None,None,None]
+	file[0] = loadTexture("file1.png", dir="menu")
+	unselectfile[0] = darken(file[0],0.5)
+	file[1] = loadTexture("file2.png", dir="menu")
+	unselectfile[1] = darken(file[1],0.5)
+	file[2] = loadTexture("file3.png", dir="menu")
+	unselectfile[2] = darken(file[2],0.5)
 	maintitle = loadTexture("maintitle.png", dir="menu")
 	arrow = loadTexture("arrow.png", dir="menu")
-	selectspotlight = [None,None]
-	selectspotlight[0] = loadTexture("fileselect1.png", dir="menu")
-	selectspotlight[1] = loadTexture("fileselect2.png", dir="menu")
-
-	selectAnimation = Animation([loadTexture("fileselect1.png", dir="menu"),
-	loadTexture("fileselect2.png", dir="menu")], .3)
-
-	filespotlightAnimation = Animation([loadTexture("filespotlight1.png", dir="menu"),
-		loadTexture("filespotlight2.png", dir="menu")], .3)
-
-	spotlightAnimation = Animation([loadTexture("spotlightcry1.png", dir="menu"),
-								loadTexture("spotlightcry2.png", dir="menu")], .3)
-
+	filespotlight = [None,None]
+	filespotlight[0] = loadTexture("filespotlight1.png", dir="menu")
+	filespotlight[1] = loadTexture("filespotlight2.png", dir="menu")
+	spotlightcry = [None,None]
+	spotlightcry[0] = loadTexture("spotlightcry1.png", dir="menu")
+	spotlightcry[1] = loadTexture("spotlightcry2.png", dir="menu")
 	controloverlay = loadTexture("controloverlay.png", dir="menu")
-	# fileunselect = loadTexture("fileunselect.png", dir="menu")
-	fileunselect = darken(file, .5)
 
 	screen.blit(mainbackground,(0,0))
 	display.flip()
-	degrees = -1
+	degrees = 0
 	increase = -0.05
 	frame2 = 0
-
-	playMusic("titleScreenLoop.ogg", intro="titleScreenIntro.ogg")
 
 	clock = time.Clock()
 
@@ -144,27 +157,53 @@ def menu():
 		mb = mouse.get_pressed()
 		kd = key.get_pressed()
 		mx,my = mouse.get_pos()
-		currTime = cTime()
 
+		if (frame - frame2) > 120:           
+			spotlight += 1
+			frame2 = frame
+			if spotlight > 1:
+				spotlight = 0
 		for e in event.get():
 			if e.type == QUIT:
 				running = False
 				quit()
 
-			if not loaded:
-				break
-
 			if e.type == KEYDOWN and menu == "selection" and e.key == 273:
 				arrowpoint -= 1
-
 			elif e.type == KEYDOWN and menu == "selection" and e.key == 274:
 				arrowpoint += 1
 
 			if arrowpoint > 2:
 				arrowpoint = 0
-
 			elif arrowpoint < 0:
 				arrowpoint = 2
+
+			if e.type == KEYDOWN and menu == "file" and e.key == 276:
+				filepoint -= 1
+			elif e.type == KEYDOWN and menu == "file" and e.key == 275:
+				filepoint += 1
+
+			if e.type == KEYDOWN and menu == "file" and e.key == 273:
+				space -= 1
+			elif e.type == KEYDOWN and menu == "file" and e.key == 274:
+				space += 1
+
+			if e.type == KEYDOWN and menu == "file" and e.key == 32 and space == 0:
+				print("delete" , filepoint)
+
+			if e.type == KEYDOWN and menu == "selection" and e.key == 32 and arrowpoint == 1:
+				running = False
+
+			if space > 1:
+				space = 0
+			elif space < 0:
+				space = 1
+
+
+			if filepoint > 2:
+				filepoint = 0
+			elif filepoint < 0:
+				filepoint = 2
 
 			if menu == "selection" and e.type == KEYDOWN and e.key == 27:     
 				menu = "file"
@@ -195,66 +234,104 @@ def menu():
 					display.flip()
 				continue
 
-			elif menu == "file" and e.type == KEYDOWN and e.key == 32:
+			elif menu == "file" and e.type == KEYDOWN and e.key == 32 and space == 1:
 				menu = "selection"
 				for x in range(0,960,70):
 					screen.blit(mainbackground,(0-x,-540))
 					screen.blit(slide,(0-x,0))
-					screen.blit(file,(320-x,total))
-					screen.blit(selectAnimation.render(currTime), (380-x,total+150))
+					screen.blit(unselectfile[0],(-20-x,total1-5))
+					screen.blit(unselectfile[1],(280-x,total2-5))
+					screen.blit(unselectfile[2],(580-x,total3-5))
+					screen.blit(filespotlight[spotlight],(45-x,total1))
+					screen.blit(filespotlight[spotlight],(325-x,total2))
+					screen.blit(filespotlight[spotlight],(635-x,total3))
 					screen.blit(menuoverlay2,(0,0))
 					display.flip()
 				continue
-			elif menu == "selection" and e.type == KEYDOWN and e.key == 32:
-				if arrowpoint == 0:
-					running = False
 
 		if menu == "main":
-			if degrees < -2:
+			if degrees < -1:
 				increase *= -1
-			elif degrees > 2:
+			elif degrees > 0:
 				increase *= -1            
 			screen.blit(mainbackground,(0,0))
-			screen.blit(spotlightAnimation.render(currTime), (270,140))
-			rottitle = transform.rotate(maintitle, degrees)
-			screen.blit(rottitle,(90,50))
+			screen.blit(spotlightcry[spotlight],(260,100))
+			rottitle = transform.rotate(maintitle,degrees)
+			screen.blit(rottitle, (475-rottitle.get_width()//2,145-rottitle.get_height()//2))
 			degrees += increase
 			slide = screen.copy()
 			screen.blit(menuoverlay,(0,0))
 			
 		elif menu == "file":
 			screen.blit(mainbackground,(0,-540)) 
-			if select.collidepoint(mx,my):
-				if total == 15:
-					total = 20
-				total -= 5
-				screen.blit(file,(320,total))
-				screen.blit(selectAnimation.render(currTime), (380,total+150))
-				slide = screen.copy()
-				screen.blit(menuoverlay2,(0,0))
+			if filepoint == 0:
+				total1 -= 5
+				screen.blit(file[0],(-20,total1))
+				screen.blit(filespotlight[spotlight],(45,total1))
+				if total1 == 15:
+					total1 = 20
 			else:
-				if total == 80:
-					total = 75
-				total += 5
-				screen.blit(fileunselect,(320,total))
-				screen.blit(filespotlightAnimation.render(currTime),(320,total))
-				slide = screen.copy()
-				screen.blit(menuoverlay2,(0,0))
+				total1 += 5
+				screen.blit(unselectfile[0],(-20,total1))
+				screen.blit(filespotlight[0],(45,total1))
+				if total1 == 55:
+					total1 = 50
+
+			if filepoint == 1:
+				total2 -= 5
+				screen.blit(file[1],(280,total2))
+				screen.blit(filespotlight[spotlight],(325,total2))
+				if total2 == 15:
+					total2 = 20
+			else:
+				total2 += 5
+				screen.blit(unselectfile[1],(280,total2))
+				screen.blit(filespotlight[0],(325,total2))
+				if total2 == 55:
+					total2 = 50
+
+			if filepoint == 2:
+				total3 -= 5
+				screen.blit(file[2],(580,total3))
+				screen.blit(filespotlight[spotlight],(635,total3))
+				if total3 == 15:
+					total3 = 20
+			else:
+				total3 += 5
+				screen.blit(unselectfile[2],(580,total3))
+				screen.blit(filespotlight[0],(635,total3))
+				if total3 == 55:
+					total3 = 50
+
+			if space == 0:
+				screen.blit(delete,(180,380))
+			elif space == 1:
+				screen.blit(unselectdelete,(180,380))
+							
 			
-		elif menu == "selection":
-			screen.blit(mainbackground,(-960,-540))
-			screen.blit(arrow,arrowlocation[arrowpoint])
+			
+			
 			slide = screen.copy()
 			screen.blit(menuoverlay2,(0,0))
 			
+		elif menu == "selection":
+			screen.blit(mainbackground,(-960,-540))
+			screen.blit(arrow,arrowselectionlocation[arrowpoint])
+			slide = screen.copy()
+			screen.blit(menuoverlay2,(0,0))
+
+
 		if nextSong != "" and changeSong != -1:
 			if mixer.music.get_pos()/1000 >= changeSong:
 				mixer.music.load(nextSong)
 				mixer.music.play(-1)
 				nextSong = ""
 				changeSong = -1
-
-		clock.tick(60)
+			
+			
+		clock.tick(200)
+		print(clock.get_fps())
+			   
 		display.flip()
 
 		loaded = True
@@ -309,6 +386,9 @@ sounds = {
 	"heartIntake": loadSound("heartIntake.wav"),
 	"holy": loadSound("holy.wav"),
 	"rockBreak": loadSound("rockBreak.wav"),
+	"doorOpen": loadSound("doorOpen.wav"),
+	"doorClose": loadSound("doorClose.wav"),
+	"deathBurst": loadSound("deathBurst.wav"),
 }
 
 # Load fonts

@@ -9,6 +9,7 @@ from Explosion import *
 from Coin import *
 from Key import *
 from Fly import *
+from Pooter import *
 from Heart import *
 from Bomb import *
 
@@ -91,7 +92,9 @@ class Room:
 				elif typ == 5 and var == 40:
 					self.other.append(Bomb(self, 0, (x, y), [self.sounds["explosion"]], self.textures["bombs"], explode=False))
 				elif typ == 13:
-					self.enemies.append(Fly((x, y), None, self.textures["enemies"]["fly"]))
+					self.enemies.append(Fly((x, y), [self.sounds["deathBurst"]], self.textures["enemies"]["fly"]))
+				elif typ == 14:
+					self.enemies.append(Pooter((x, y), [self.sounds["deathBurst"]], self.textures["enemies"]["pooter"]))
 
 
 	def addDoor(self, xy, variant, isOpen):
@@ -142,8 +145,18 @@ class Room:
 		pass
 
 	def render(self, surface, character, currTime):
+		if len(self.enemies) > 0:
+			for door in self.doors:
+				door.close()
+		else:
+			for door in self.doors:
+				door.open()
+
 		if not self.animating:
 			surface.blit(self.backdrop, (38,-16))
+
+			for door in self.doors:
+				door.render(surface)
 
 			for rock in self.rocks:
 				rock.render(surface)
@@ -153,9 +166,6 @@ class Room:
 
 			for fire in self.fires:
 					fire.render(surface, currTime)
-
-			for door in self.doors:
-				door.render(surface)
 
 			objects = self.rocks + self.poops + self.fires
 

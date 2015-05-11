@@ -113,10 +113,11 @@ class Game:
 					except:
 						currentRoom = old
 
+			
+
+
 			if isaac.dead:
 				running = False
-
-			
 
 			display.flip()
 			clock.tick(60)

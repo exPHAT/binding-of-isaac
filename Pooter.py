@@ -4,7 +4,7 @@ from Enemy import *
 from Animation import *
 from math import *
 
-class Fly(Enemy):
+class Pooter(Enemy):
 	"""Simple enemy fly class"""
 
 	def __init__(self, xy, sounds, textures):
@@ -13,7 +13,7 @@ class Fly(Enemy):
 		self.sounds = sounds
 
 		self.frames = [textures.subsurface(i*64, 0, 64, 64) for i in range(2)]
-		self.deathFrames = [textures.subsurface(i*128 - ((i//4)*128*4), 128 * (i//4 + 1), 128, 128) for i in range(12)]
+		# self.deathFrames = [textures.subsurface(i*128 - ((i//4)*128*4), 128 * (i//4 + 1), 128, 128) for i in range(12)]
 
 		self.anim = Animation(self.frames, 0.04)
 
@@ -21,7 +21,7 @@ class Fly(Enemy):
 
 	def die(self):
 		if not self.dead:
-			self.anim = Animation(self.deathFrames, 0.24)
+			# self.anim = Animation(self.deathFrames, 0.24)
 			self.dead = True
 			self.sounds[-1].play() # Play death sound
 

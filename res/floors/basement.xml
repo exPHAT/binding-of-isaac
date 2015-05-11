@@ -1,6 +1,6 @@
 ﻿<!--Converted to ANM2 by Gibbed.Rebirth.ConvertStage-->
 <stage>
-  <room type="1" variant="0" name="start" difficulty="1" weight="1" width="13" height="7">
+  <room type="1" variant="0" name="poop" difficulty="1" weight="1" width="13" height="7">
     <door x="6" y="-1" exists="True" />
     <door x="-1" y="3" exists="True" />
     <door x="13" y="3" exists="True" />
@@ -89,10 +89,7 @@
     <door x="-1" y="3" exists="True" />
     <door x="13" y="3" exists="True" />
     <door x="6" y="7" exists="True" />
-    <spawn x="5" y="3">
-      <entity type="5" variant="10" subtype="3" weight="2" />
-    </spawn>
-    <spawn x="7" y="3">
+    <spawn x="6" y="3">
       <entity type="5" variant="10" subtype="3" weight="2" />
     </spawn>
   </room>
@@ -115,15 +112,33 @@
     </spawn>
   </room>
   <room type="1" variant="0" name="flies" difficulty="1" weight="1" width="13" height="7">
-    <door x="6" y="7" exists="True" />
-    <door x="13" y="3" exists="True" />
-    <door x="-1" y="3" exists="True" />
     <door x="6" y="-1" exists="True" />
+    <door x="-1" y="3" exists="True" />
+    <door x="13" y="3" exists="True" />
+    <door x="6" y="7" exists="True" />
     <spawn x="5" y="3">
       <entity type="13" variant="0" subtype="0" weight="2" />
     </spawn>
     <spawn x="7" y="3">
       <entity type="13" variant="0" subtype="0" weight="2" />
+    </spawn>
+  </room>
+  <room type="1" variant="0" name="pooter" difficulty="1" weight="1" width="13" height="7">
+    <door x="6" y="7" exists="True" />
+    <door x="13" y="3" exists="True" />
+    <door x="-1" y="3" exists="True" />
+    <door x="6" y="-1" exists="True" />
+    <spawn x="0" y="0">
+      <entity type="14" variant="0" subtype="0" weight="2" />
+    </spawn>
+    <spawn x="12" y="0">
+      <entity type="14" variant="0" subtype="0" weight="2" />
+    </spawn>
+    <spawn x="0" y="6">
+      <entity type="14" variant="0" subtype="0" weight="2" />
+    </spawn>
+    <spawn x="12" y="6">
+      <entity type="14" variant="0" subtype="0" weight="2" />
     </spawn>
   </room>
 </stage>

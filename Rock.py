@@ -35,6 +35,7 @@ class Rock:
 
 			self.destroyed = True
 			self.texture = self.brokenTexture
+			self.sound.stop()
 			self.sound.play()
 
 	def hurt(self, ammount):

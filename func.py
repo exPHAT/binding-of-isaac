@@ -15,7 +15,15 @@ def darken(image, ammount):
 	pa.replace((0,0,0,ammount), (0,0,0,0))
 	return pa.make_surface()
 
-def rWithOne(possibleCoords, rooms):
+def parseImage(image, startX, startY, width, height, xCount, yCount, total):
+	textures = []
+
+	[textures.subsurface(i*128 - ((i//4)*128*4), 128 * (i//4 + 1), 128, 128) for i in range(12)]
+
+	for i in range(total):
+		image.subsurface(i*width - ((i//xCount)*width*xCount), i*height , width, height)
+
+def rWithOne(floor, possibleCoords, rooms):
 	rs = []
 	moves = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
@@ -26,6 +34,12 @@ def rWithOne(possibleCoords, rooms):
 			mx, my = m
 			newCoords = (x+mx, y+my)
 			
+			try:
+				if floor[newCoords].variant != 0:
+					continue
+			except:
+				pass
+
 			if newCoords in rooms:
 				count += 1
 
@@ -59,12 +73,12 @@ def loadFloor(name, index, size, sounds, textures):
 		rooms.append(chosen)
 		floor[chosen] = Room(index, 0, chosen, d[unusedRoom], textures, sounds)
 
-	roomsWithOne = rWithOne(possibleCoords, rooms)
+	roomsWithOne = rWithOne(floor, possibleCoords, rooms)
 
 	itemRoom = choice(roomsWithOne)
 	floor[itemRoom] = Room(index, 1, chosen, d[0], textures, sounds)
 
-	roomsWithOne = rWithOne(possibleCoords, rooms)
+	roomsWithOne = rWithOne(floor, possibleCoords, rooms)
 
 	bossRoom = choice(roomsWithOne)
 	roomsWithOne.remove(bossRoom)

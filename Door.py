@@ -18,8 +18,9 @@ class Door:
 		self.side = side
 		self.variant = variant
 		self.texture = texture[variant]
+		self.sounds = sounds
 
-		self.open = isOpen
+		self.isOpen = isOpen
 		self.x = -1
 		self.y = -1
 
@@ -56,10 +57,16 @@ class Door:
 
 
 	def close(self):
-		self.open = False
+		if self.isOpen:
+			self.isOpen = False
+			self.sounds["doorClose"].stop()
+			self.sounds["doorClose"].play()
 
 	def open(self):
-		self.open = True
+		if not self.isOpen:
+			self.isOpen = True
+			self.sounds["doorOpen"].stop()
+			self.sounds["doorOpen"].play()
 
 	def step(self):
 		pass
@@ -72,7 +79,7 @@ class Door:
 
 		surface.blit(self.doorBack, xy)
 
-		if not self.open:
+		if not self.isOpen:
 			surface.blit(self.lDoor, xy)
 			surface.blit(self.rDoor, xy)
 

@@ -48,6 +48,8 @@ class Character:
 			[]
 		]
 
+		self.bodyRect = Rect(self.x-16, self.y-16, 32, 32)
+
 		self.pickups = [Pickup(i, textures["pickups"], fonts["pickups"]) for i in range(3)] # Keys, Bombs, Coins
 
 		for frame in self.feet[0]:
@@ -389,8 +391,10 @@ class Character:
 
 			rcx = ob.bounds.collidepoint(self.x+dx, self.y)
 			rcy = ob.bounds.collidepoint(self.x, self.y+dy)
-			rockColX = rcx
-			rockColY = rcy
+			if rcx:
+				rockColX = rcx
+			if rcy:
+				rockColY = rcy
 			if rcx or rcy:
 				if type(ob) == Fire:
 					self.hurt(1, None, None, time)
@@ -415,17 +419,20 @@ class Character:
 						self.specialFrame = 1
 						self.lastPickup = time
 
-				if not ob.collideable:
+				if not ob.collideable and not rockColX and not rockColY:
 					rockColX = rockColY = False
-				break
 
 		mx = [0, 1, 0, -1]
 		my = [-1, 0, 1, 0]
 
 		for i in range(len(doors)):
-			door = doors[i].rect
-			dcx = door.collidepoint(self.x+dx, self.y)
-			dcy = door.collidepoint(self.x, self.y+dy)
+			door = doors[i]
+
+			if not door.isOpen:
+				continue
+
+			dcx = door.rect.collidepoint(self.x+dx, self.y)
+			dcy = door.rect.collidepoint(self.x, self.y+dy)
 
 			if dcx:
 				self.x += dx
@@ -433,14 +440,14 @@ class Character:
 			if dcy:
 				self.y += dy
 
-			side = doors[i].side
+			side = door.side
 
 			if not dcx or not dcy:
 				if sum(map(int, [
-						mx[side] < 0 and door.x-(self.x+dx) > 0,
-						mx[side] > 0 and door.x+door.w-(self.x+dx) < 0,
-						my[side] > 0 and door.y-(self.y+dy) > 0,
-						my[side] < 0 and door.y+door.h-(self.y+dy) < 0,
+						mx[side] < 0 and door.rect.x-(self.x+dx) > 0,
+						mx[side] > 0 and door.rect.x+door.rect.w-(self.x+dx) < 0,
+						my[side] > 0 and door.rect.y-(self.y+dy) > 0,
+						my[side] < 0 and door.rect.y+door.rect.h-(self.y+dy) < 0,
 					])) == 1:
 					move[0] = mx[side]
 					move[1] = my[side]
@@ -451,13 +458,15 @@ class Character:
 		self.x += dx if	inBoundsX and (not rockColX or self.isFlying) else 0
 		self.y += dy if inBoundsY and (not rockColY or self.isFlying) else 0
 
+		self.bodyRect = Rect(self.x-16, self.y, 32, 16) # Move body rect
+
 		self.updateVel()
 		
 		if self.specialFrame == 0:
 			surface.blit(self.body, (self.x-32, self.y-32))
 			surface.blit(self.head, (self.x-32, self.y-32-20))
 		else:
-			surface.blit(self.specialFrames[self.specialFrame-1], (self.x-64, self.y-64))
+			surface.blit(self.specialFrames[self.specialFrame-1], (self.x-64, self.y-72))
 
 		for tear in self.tears[:]:
 			if not tear.render(surface, time, bounds, obsticals):
@@ -469,6 +478,8 @@ class Character:
 
 		for p in self.pickups:
 			p.render(surface)
+
+		# draw.rect(surface, (255,0,0), self.bodyRect)
 
 		# for r in self.doorRects:
 		# 	draw.rect(surface, (255,0,0), r)
