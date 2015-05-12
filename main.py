@@ -29,32 +29,6 @@ screen = display.set_mode((WIDTH, HEIGHT))
 nextSong = ""
 changeSong = -1
 
-def loadTexture(name, dir="", double=True):
-	# Load texture and double its size
-
-	if dir != "":
-		t = image.load(os.path.join('res', 'textures', dir, name))
-
-	else:
-		t = image.load(os.path.join('res','textures', name))
-
-	w = t.get_width()
-	h = t.get_height()
-
-	if double:
-		w *= 2
-		h *= 2
-
-	if False:
-		return transform.scale2x(t)
-	else:
-		return transform.scale(t, (w, h))
-
-def loadSound(name):
-	s = mixer.Sound(os.path.join('res','sounds', name))
-
-	return s
-
 def playMusic(name, intro=""):
 	global nextSong, changeSong
 
@@ -147,7 +121,7 @@ def menu():
 	screen.blit(mainbackground,(0,0))
 	display.flip()
 	degrees = 0
-	increase = -0.05
+	increase = -0.0
 	frame2 = 0
 
 	clock = time.Clock()
@@ -164,7 +138,7 @@ def menu():
 			if spotlight > 1:
 				spotlight = 0
 		for e in event.get():
-			if e.type == QUIT:
+			if e.type == QUIT or (e.type == KEYDOWN and e.key == 27 and menu == "main"):
 				running = False
 				quit()
 
@@ -329,9 +303,7 @@ def menu():
 				changeSong = -1
 			
 			
-		clock.tick(200)
-		print(clock.get_fps())
-			   
+		clock.tick(60)
 		display.flip()
 
 		loaded = True
@@ -344,7 +316,7 @@ display.set_icon(image.load(os.path.join('res','textures', 'isaac.png')))
 textures = {
 	"hearts": loadTexture("hearts.png"),
 	"pickups": loadTexture("pickups.png"),
-	"character": loadTexture("character.png"),
+	"character": darken(loadTexture("character.png"), .1),
 	"floors": [loadTexture("basement.png")],
 	"controls": loadTexture("controls.png"),
 	"doors": [loadTexture("door.png"),
@@ -353,7 +325,7 @@ textures = {
 			loadTexture("devil_door.png"),
 			loadTexture("angel_door.png")],
 	"controls": loadTexture("controls.png"),
-	"rocks": loadTexture("rocks.png"),
+	"rocks": darken(loadTexture("rocks.png"), .1),
 	"poops": loadTexture("poops.png"),
 	"tears": [loadTexture("tears.png"), loadTexture("tear_pop.png")],
 	"fires": [loadTexture("fire_top.png"), loadTexture("fire_bottom.png")],
@@ -361,6 +333,14 @@ textures = {
 	"coins": [loadTexture("penny.png"), loadTexture("nickel.png"), loadTexture("dime.png")],
 	"keys": loadTexture("keys.png"),
 	"pickupHearts": loadTexture("pickup_hearts.png"),
+	"overlays": [loadTexture("%i.png"%i, dir="overlays") for i in range(5)],
+	"shading": loadTexture("shading.png"),
+	"map": {
+		"background": loadTexture("minimap.png").subsurface(0, 0, 112, 102),
+		"in": loadTexture("minimap.png").subsurface(113, 0, 16, 16),
+		"entered": loadTexture("minimap.png").subsurface(113, 16, 16, 16),
+		"seen": loadTexture("minimap.png").subsurface(113, 32, 16, 16),
+	},
 	"enemies": {
 		"fly": loadTexture("fly.png"),
 		"pooter": loadTexture("pooter.png"),
@@ -393,6 +373,7 @@ sounds = {
 
 # Load fonts
 fonts = {
+	"main": loadCFont("main.png", 20, 16, 26),
 	"pickups": loadCFont("pickup.png", 10, 12, 10)
 }
 

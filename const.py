@@ -11,3 +11,6 @@ HEIGHT = 540
 
 GRATIO = 52 # Pixels/Grid size
 GRIDX, GRIDY = 154, 88
+
+MAPX = WIDTH-104
+MAPY = 82

@@ -36,7 +36,7 @@ def rWithOne(floor, possibleCoords, rooms):
 			
 			try:
 				if floor[newCoords].variant != 0:
-					continue
+					break
 			except:
 				pass
 
@@ -76,12 +76,38 @@ def loadFloor(name, index, size, sounds, textures):
 	roomsWithOne = rWithOne(floor, possibleCoords, rooms)
 
 	itemRoom = choice(roomsWithOne)
-	floor[itemRoom] = Room(index, 1, chosen, d[0], textures, sounds)
+	floor[itemRoom] = Room(index, 1, itemRoom, d[0], textures, sounds)
 
 	roomsWithOne = rWithOne(floor, possibleCoords, rooms)
 
 	bossRoom = choice(roomsWithOne)
 	roomsWithOne.remove(bossRoom)
-	floor[bossRoom] = Room(index, 2, chosen, d[0], textures, sounds)
+	floor[bossRoom] = Room(index, 2, bossRoom, d[0], textures, sounds)
 
 	return floor
+
+def loadTexture(name, dir="", double=True):
+	# Load texture and double its size
+
+	if dir != "":
+		t = image.load(os.path.join('res', 'textures', dir, name))
+
+	else:
+		t = image.load(os.path.join('res','textures', name))
+
+	w = t.get_width()
+	h = t.get_height()
+
+	if double:
+		w *= 2
+		h *= 2
+
+	if False:
+		return transform.scale2x(t)
+	else:
+		return transform.scale(t, (w, h))
+
+def loadSound(name):
+	s = mixer.Sound(os.path.join('res','sounds', name))
+
+	return s

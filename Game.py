@@ -4,6 +4,7 @@ from Character import *
 from Room import *
 from Bomb import *
 from time import time as cTime
+import random
 
 class Game:
 	floor = {}
@@ -14,6 +15,8 @@ class Game:
 		self.surface = surface
 		self.characterType = characterType
 		self.seed = seed
+
+		random.seed(self.seed)
 
 	def setup(self):
 		floor = loadFloor("basement.xml", self.floorIndex, randint(8, 12), self.sounds, self.textures)
@@ -39,6 +42,14 @@ class Game:
 
 		self.floor = floor
 
+	def updateMinimap(self, currentRoom):
+		self.minimap.fill((0,0,0,0))
+		self.minimap.blit(self.textures["map"]["background"], (0, 0))
+		for room in self.floor:
+			self.floor[room].renderMap(self.minimap, currentRoom, False)
+		for room in self.floor:
+			self.floor[room].renderMap(self.minimap, currentRoom, True)
+
 	def run(self, screen, sounds, textures, fonts):
 		animatingRooms = self.animatingRooms
 		currentRoom = self.currentRoom
@@ -51,9 +62,29 @@ class Game:
 		floorIndex = self.floorIndex
 		clock = time.Clock()
 
+		self.minimap = Surface((textures["map"]["background"].get_width(), textures["map"]["background"].get_height())).convert_alpha()
+		self.updateMinimap(currentRoom)
+		self.minimap.set_clip(Rect(4, 4, 100, 86))
+		mWidth = self.minimap.get_width()
+		mHeight = self.minimap.get_height()
 		
-
+		posMoves = [[1, 0], [0, 1], [-1, 0], [0, -1]]
 		self.isaac = isaac = Character(WIDTH//2, (HEIGHT//4)*3, [[115, 100, 119, 97], [274, 275, 273, 276]], 1, 1, textures, sounds, fonts)
+
+		floor[currentRoom].entered = True
+
+		for m in posMoves:
+			mx, my = m
+			x, y = currentRoom
+			newPos = (mx+x, my+y)
+
+			try:
+				floor[newPos].seen = True
+			except:
+				pass
+
+
+		self.updateMinimap(currentRoom)
 
 		running = True
 		while running:
@@ -76,8 +107,8 @@ class Game:
 						isaac.pickups[1].add(3)
 					elif e.unicode == "h":
 						isaac.hurt(1, 0, 0, currTime)
-					# else:
-					# 	print(e)
+					elif e.unicode == "m":
+						print(self.seed)
 
 				elif e.type == KEYUP:
 					isaac.moving(e.key, False, False)
@@ -110,11 +141,26 @@ class Game:
 						isaac.y += 338*(move[1])
 
 						isaac.clearTears()
+
+						floor[currentRoom].entered = True
+
+						for m in posMoves:
+							mx, my = m
+							x, y = currentRoom
+							newPos = (mx+x, my+y)
+
+							try:
+								floor[newPos].seen = True
+							except:
+								pass
+
+						self.updateMinimap(currentRoom)
+
 					except:
 						currentRoom = old
 
-			
-
+			# DRAW MAP
+			screen.blit(self.minimap, (MAPX-mWidth//2, MAPY-mHeight//2))
 
 			if isaac.dead:
 				running = False

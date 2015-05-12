@@ -19,9 +19,9 @@ class Explosion:
 		self.anim = Animation(self.frames, .45)
 		sound.play() # Play explosion sound
 
-	def render(self, surface, time):
+	def render(self, surface, time, ox=0, oy=0):
 		frame = self.anim.render(time)
 		if self.anim.looped:
 			return False
-		surface.blit(frame, ((GRIDX + GRATIO*self.x) - self.anim.width//2, (GRIDY + GRATIO*self.y) - self.anim.height//2 - 50))
+		surface.blit(frame, ((GRIDX + GRATIO*self.x) - self.anim.width//2 + ox, (GRIDY + GRATIO*self.y) - self.anim.height//2 - 50 + oy))
 		return True

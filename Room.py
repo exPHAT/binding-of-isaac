@@ -1,5 +1,6 @@
 from pygame import *
 from const import *
+from random import *
 from Rock import *
 from Poop import *
 from Fire import *
@@ -12,6 +13,8 @@ from Fly import *
 from Pooter import *
 from Heart import *
 from Bomb import *
+
+import func
 
 class Room:
 	"""The main floor class"""
@@ -27,22 +30,36 @@ class Room:
 	# ROOMS ARE 13 x 7
 
 	def __init__(self, floor, variant, xy, xml, textures, sounds):
-		texture = textures["floors"][floor].subsurface(Rect(0, 0, 221*2, 143*2))
+		offX = offY = 0
+		if variant == 2:
+			offX, offY = 234*2, 156*2
+
+		texture = textures["floors"][floor].subsurface(Rect(offX, offY, 221*2, 143*2))
 		backdrop = Surface((221*2*2, 143*2*2))
+
 
 		backdrop.blit(texture, (0,0))
 		backdrop.blit(transform.flip(texture, True, False), (221*2, 0))
 		backdrop.blit(transform.flip(texture, False, True), (0, 143*2))
 		backdrop.blit(transform.flip(texture, True, True), (221*2, 143*2))
 
+		
+
 		if xy[0] == 0 and xy[1] == 0:
 			controls = textures["controls"]
 			backdrop.blit(controls, (113, 203))
+
+		backdrop.blit(textures["shading"], (0,0))
+		backdrop = func.darken(backdrop, .25)
+		backdrop.blit(textures["overlays"][randint(0,4)], (0,0))
 
 		self.x, self.y = xy
 		self.w, self.h = 0,0
 
 		self.variant = variant
+
+		self.entered = False
+		self.seen = False
 
 		self.floor = floor
 		self.backdrop = backdrop
@@ -141,8 +158,28 @@ class Room:
 	def step(self, currTime):
 		pass
 
-	def renderMap(self, surface):
-		pass
+	def renderMap(self, surface, currentRoom, detail):
+		ratio = 16
+		x, y = currentRoom
+
+		if self.x == x and self.y == y:
+			# Isaac is in this room
+			texture = self.textures["map"]["in"]
+		elif self.entered:
+			# Isaac has entered this room
+			texture = self.textures["map"]["entered"]
+		elif self.seen:
+			# It is one of the 4 surrounding rooms to one he has seens
+			texture = self.textures["map"]["seen"]
+		else:
+			return
+
+		if not detail:
+			draw.rect(surface, (0,0,0), (surface.get_width()//2+(self.x-x)*ratio - 8, surface.get_height()/2-(self.y-y)*ratio - 8, 24, 24))
+			return
+
+		surface.blit(texture, (surface.get_width()//2+(self.x-x)*ratio - 4, surface.get_height()/2-(self.y-y)*ratio - 4))
+
 
 	def render(self, surface, character, currTime):
 		if len(self.enemies) > 0:

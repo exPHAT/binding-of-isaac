@@ -1,6 +1,8 @@
 from pygame import *
 from const import GRATIO
 
+import func
+
 class Door:
 	"""The main door class"""
 
@@ -17,7 +19,7 @@ class Door:
 	def __init__(self, side, variant, isOpen, texture, sounds):
 		self.side = side
 		self.variant = variant
-		self.texture = texture[variant]
+		self.texture = func.darken(texture[variant], .25)
 		self.sounds = sounds
 
 		self.isOpen = isOpen
