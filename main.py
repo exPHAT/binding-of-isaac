@@ -11,15 +11,20 @@ from time import time as cTime
 from random import *
 from func import *
 from Game import *
+from JoystickController import *
 import os
 
 init() # Initalize pygame
 joystick.init() # Allow joystick support
 
+jController = None
+
 jCount = joystick.get_count()
 if jCount > 0:
 	joysticks = [joystick.Joystick(i) for i in range(jCount)]
 	joysticks[0].init() # Default to first joystick
+	jController = JoystickController(joysticks[0], 0.5)
+
 else:
 	print("Joystick not detected.")
 	joystick.quit() # Deinit joystick
@@ -84,7 +89,7 @@ def menu():
 	swap = False
 	menu = "main"
 	filepoint = 0
-
+ 
 	menuoverlay = loadTexture("menuoverlay.png", dir="menu", double=False)
 	menuoverlay2 = loadTexture("menuoverlay2.png", dir="menu", double=False)
 	mainbackground = loadTexture("mainbackground.png", dir="menu").convert()
@@ -315,7 +320,8 @@ textures = {
 	"hearts": loadTexture("hearts.png"),
 	"pickups": loadTexture("pickups.png"),
 	"character": darken(loadTexture("character.png"), .1),
-	"floors": [loadTexture("basement.png")],
+	"floors": [loadTexture("basement.png"),
+			loadTexture("caves.png")],
 	"controls": loadTexture("controls.png"),
 	"doors": [loadTexture("door.png"),
 			loadTexture("treasure_door.png"),
@@ -391,7 +397,7 @@ while running:
 	playMusic("basementLoop.ogg", intro="basementIntro.ogg")
 
 	game = Game(characterType, floorSeed)
-	game.run(screen, sounds, textures, fonts)
+	game.run(screen, sounds, textures, fonts, joystick=jController)
 
 
 quit()

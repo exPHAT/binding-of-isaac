@@ -50,7 +50,7 @@ class Game:
 		for room in self.floor:
 			self.floor[room].renderMap(self.minimap, currentRoom, True)
 
-	def run(self, screen, sounds, textures, fonts):
+	def run(self, screen, sounds, textures, fonts, joystick=None):
 		animatingRooms = self.animatingRooms
 		currentRoom = self.currentRoom
 
@@ -113,11 +113,6 @@ class Game:
 				elif e.type == KEYUP:
 					isaac.moving(e.key, False, False)
 
-				elif e.type == JOYAXISMOTION:
-					print("motion shit")
-					rounded = round(e.value, 2)
-					isaac.moving(e.axis, rounded, True)
-
 			if len(animatingRooms) > 0:
 				for r in animatingRooms[:]:
 					r.render(screen, isaac, currTime)
@@ -161,6 +156,9 @@ class Game:
 
 			# DRAW MAP
 			screen.blit(self.minimap, (MAPX-mWidth//2, MAPY-mHeight//2))
+
+			if joystick != None:
+				joystick.update()
 
 			if isaac.dead:
 				running = False
