@@ -36,6 +36,7 @@ def rWithOne(floor, possibleCoords, rooms):
 			
 			try:
 				if floor[newCoords].variant != 0:
+					count = 0
 					break
 			except:
 				pass

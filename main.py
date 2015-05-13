@@ -85,16 +85,6 @@ def menu():
 	menu = "main"
 	filepoint = 0
 
-	def darken(image, ammount):
-		nImage = image.copy()
-		ammount = int(ammount*255)
-		dark = Surface(nImage.get_size())
-		dark.set_alpha(ammount, RLEACCEL)
-		nImage.blit(dark, (0,0))
-		pa = PixelArray(nImage)
-		pa.replace((0,0,0,ammount), (0,0,0,0))
-		return pa.make_surface()
-
 	menuoverlay = loadTexture("menuoverlay.png", dir="menu", double=False)
 	menuoverlay2 = loadTexture("menuoverlay2.png", dir="menu", double=False)
 	mainbackground = loadTexture("mainbackground.png", dir="menu").convert()
@@ -132,7 +122,7 @@ def menu():
 		kd = key.get_pressed()
 		mx,my = mouse.get_pos()
 
-		if (frame - frame2) > 120:           
+		if (frame - frame2) > 120:
 			spotlight += 1
 			frame2 = frame
 			if spotlight > 1:
@@ -181,6 +171,8 @@ def menu():
 
 			if menu == "selection" and e.type == KEYDOWN and e.key == 27:     
 				menu = "file"
+				sounds["pageTurn"].stop()
+				sounds["pageTurn"].play()
 				for x in range(0,960,70):
 					screen.blit(mainbackground,(-960+x,-540))
 					screen.blit(slide,(0+x,0))
@@ -190,6 +182,8 @@ def menu():
 
 			elif menu == "main" and e.type == KEYDOWN and e.key == 32:
 				menu = "file"
+				sounds["pageTurn"].stop()
+				sounds["pageTurn"].play()
 				for x in range(0,540,40):
 					screen.blit(mainbackground,(0,0-x))
 					screen.blit(slide,(0,0-x))
@@ -200,6 +194,8 @@ def menu():
 
 			elif  menu == "file" and e.type == KEYDOWN and e.key == 27:          
 				menu = "main"
+				sounds["pageTurn"].stop()
+				sounds["pageTurn"].play()
 				for x in range(0,540,40):
 					screen.blit(mainbackground,(0,-540+x))
 					screen.blit(slide,(0,0+x))
@@ -210,6 +206,8 @@ def menu():
 
 			elif menu == "file" and e.type == KEYDOWN and e.key == 32 and space == 1:
 				menu = "selection"
+				sounds["pageTurn"].stop()
+				sounds["pageTurn"].play()
 				for x in range(0,960,70):
 					screen.blit(mainbackground,(0-x,-540))
 					screen.blit(slide,(0-x,0))
@@ -369,6 +367,7 @@ sounds = {
 	"doorOpen": loadSound("doorOpen.wav"),
 	"doorClose": loadSound("doorClose.wav"),
 	"deathBurst": loadSound("deathBurst.wav"),
+	"pageTurn": loadSound("pageTurn.wav"),
 }
 
 # Load fonts
