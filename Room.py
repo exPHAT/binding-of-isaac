@@ -43,8 +43,6 @@ class Room:
 		backdrop.blit(transform.flip(texture, False, True), (0, 143*2))
 		backdrop.blit(transform.flip(texture, True, True), (221*2, 143*2))
 
-		
-
 		if xy[0] == 0 and xy[1] == 0:
 			controls = textures["controls"]
 			backdrop.blit(controls, (113, 203))
@@ -169,7 +167,7 @@ class Room:
 			# Isaac has entered this room
 			texture = self.textures["map"]["entered"]
 		elif self.seen:
-			# It is one of the 4 surrounding rooms to one he has seens
+			# Isaac has seen the door to the room
 			texture = self.textures["map"]["seen"]
 		else:
 			return
@@ -179,6 +177,8 @@ class Room:
 			return
 
 		surface.blit(texture, (surface.get_width()//2+(self.x-x)*ratio - 4, surface.get_height()/2-(self.y-y)*ratio - 4))
+		if self.variant == 1 or self.variant == 2 and not self.x == x and self.y == y:
+			surface.blit(self.textures["map"][["item", "boss"][self.variant-1]], (surface.get_width()//2+(self.x-x)*ratio - 4, surface.get_height()/2-(self.y-y)*ratio - 4))
 
 
 	def render(self, surface, character, currTime):

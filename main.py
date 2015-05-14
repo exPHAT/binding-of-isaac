@@ -1,4 +1,4 @@
-# main.py
+  # main.py
 # Aaron Taylor
 # Moose Abumeeiz
 #
@@ -305,6 +305,9 @@ def menu():
 				nextSong = ""
 				changeSong = -1
 			
+
+		if jController != None:
+			jController.update()
 			
 		clock.tick(60)
 		display.flip()
@@ -344,6 +347,8 @@ textures = {
 		"in": loadTexture("minimap.png").subsurface(113, 0, 16, 16),
 		"entered": loadTexture("minimap.png").subsurface(113, 16, 16, 16),
 		"seen": loadTexture("minimap.png").subsurface(113, 32, 16, 16),
+		"item": loadTexture("minimap.png").subsurface(113, 48, 16, 16),
+		"boss": loadTexture("minimap.png").subsurface(113, 64, 16, 16),
 	},
 	"enemies": {
 		"fly": loadTexture("fly.png"),
