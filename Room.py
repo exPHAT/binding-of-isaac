@@ -29,6 +29,9 @@ class Room:
 
 	# ROOMS ARE 13 x 7
 
+	lcx = -1
+	lcy = -1
+
 	def __init__(self, floor, variant, xy, xml, textures, sounds):
 		offX = offY = 0
 		if variant == 2:
@@ -219,6 +222,12 @@ class Room:
 						self.other.remove(other)
 
 			everything = objects+self.other
+
+			cx, cy = int((character.x-GRIDX)/GRATIO), int((character.y-GRIDY)/GRATIO)
+			if cx != self.lcx or cy != self.lcy:
+				self.lcx, self.lcy = cx, cy
+				for enemy in self.enemies:
+					enemy.pathFind((cx,cy), self.nodes, self.paths)
 
 			for enemy in self.enemies[:]:
 				if not enemy.render(surface, currTime, character, self.nodes, self.paths):

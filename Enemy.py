@@ -17,7 +17,7 @@ class Enemy:
 
 			if len(self.path) == 0:
 				return
-			
+
 			dx, dy = self.x-self.path[0][0], self.y-self.path[0][1]
 
 			if sqrt(dx**2+dy**2) < 0.15:
@@ -27,7 +27,7 @@ class Enemy:
 			dx, dy = self.path[0][0]-self.x, self.path[0][1]-self.y
 		else:
 			dx, dy = self.cx-self.x, self.cy-self.y
-
+			
 		something = sqrt(dx**2+dy**2)
 
 		rx = dx/something
@@ -49,9 +49,10 @@ class Enemy:
 			# STOP THE ENEMY
 
 			print("HELP NO PATH!")
+			self.path = []
 		else:
 			for i in range(len(path)):
 				p = path[i]
 				path[i] = (p.x, p.y)
-			self.path = path
+			self.path = path[1:]
 	
