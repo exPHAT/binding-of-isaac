@@ -80,6 +80,14 @@ class Room:
 
 		self.parseRoomXML(xml) # Build the room based on the xml
 
+		obsticals = []
+
+		for o in self.rocks+self.fires+self.poops:
+			obsticals.append([o.x, o.y])
+
+		graph, self.nodes = make_graph({"width": 13, "height": 7, "obstacle": obsticals})
+		self.paths = AStarGrid(graph)
+
 	def parseRoomXML(self, xml):
 		self.w, self.h = map(int, [xml.get('width'), xml.get('height')])
 		for obj in xml: # Iterate through room objects
@@ -213,7 +221,7 @@ class Room:
 			everything = objects+self.other
 
 			for enemy in self.enemies[:]:
-				if not enemy.render(surface, currTime, character, everything):
+				if not enemy.render(surface, currTime, character, self.nodes, self.paths):
 					self.enemies.remove(enemy)
 
 			move = character.render(surface, currTime, self.levelBounds, everything, self.doors)
@@ -247,7 +255,7 @@ class Room:
 				objects = self.rocks + self.poops + self.fires
 
 				for other in self.other[::-1]:
-					if not other.render(surface, currTime, objects, ox=self.ax, oy=self.ay):
+					if not other.render(surface, currTime, self.nodes, self.paths, ox=self.ax, oy=self.ay):
 						self.other.remove(other)
 
 			return [0, 0]

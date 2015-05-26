@@ -72,7 +72,8 @@ def generateSeed():
 	for i in range(SEED_LENGTH):
 		finalSeed += characters[randint(0, SEED_LENGTH)]
 
-	return finalSeed
+	# return finalSeed
+	return "EGAAHBBI"
 
 def menu():
 	global nextSong, changeSong
@@ -89,7 +90,7 @@ def menu():
 	swap = False
 	menu = "main"
 	filepoint = 0
- 
+
 	menuoverlay = loadTexture("menuoverlay.png", dir="menu", double=False)
 	menuoverlay2 = loadTexture("menuoverlay2.png", dir="menu", double=False)
 	mainbackground = loadTexture("mainbackground.png", dir="menu").convert()

@@ -23,7 +23,7 @@ def parseImage(image, startX, startY, width, height, xCount, yCount, total):
 	for i in range(total):
 		image.subsurface(i*width - ((i//xCount)*width*xCount), i*height , width, height)
 
-def rWithOne(floor, possibleCoords, rooms):
+def findRooms(floor, possibleCoords, rooms):
 	rs = []
 	moves = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
@@ -44,8 +44,7 @@ def rWithOne(floor, possibleCoords, rooms):
 			if newCoords in rooms:
 				count += 1
 
-		if count == 1:
-			rs.append(room)
+		rs.append([room, count])
 
 	return rs
 
@@ -74,15 +73,25 @@ def loadFloor(name, index, size, sounds, textures):
 		rooms.append(chosen)
 		floor[chosen] = Room(index, 0, chosen, d[unusedRoom], textures, sounds)
 
-	roomsWithOne = rWithOne(floor, possibleCoords, rooms)
+	someRooms = findRooms(floor, possibleCoords, rooms)
 
-	itemRoom = choice(roomsWithOne)
+	shuffle(someRooms)
+
+	for room in someRooms:
+		if room[1] == 1:
+			itemRoom = tuple(room[0])
+			break
 	floor[itemRoom] = Room(index, 1, itemRoom, d[0], textures, sounds)
 
-	roomsWithOne = rWithOne(floor, possibleCoords, rooms)
+	someRooms = findRooms(floor, possibleCoords, rooms)
 
-	bossRoom = choice(roomsWithOne)
-	roomsWithOne.remove(bossRoom)
+	shuffle(someRooms)
+
+	for room in someRooms:
+		if room[1] == 1:
+			bossRoom = tuple(room[0])
+			break
+
 	floor[bossRoom] = Room(index, 2, bossRoom, d[0], textures, sounds)
 
 	return floor

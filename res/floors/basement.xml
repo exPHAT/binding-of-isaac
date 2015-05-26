@@ -122,6 +122,39 @@
     <spawn x="7" y="3">
       <entity type="13" variant="0" subtype="0" weight="2" />
     </spawn>
+    <spawn x="6" y="3">
+      <entity type="1000" variant="0" subtype="0" weight="2" />
+    </spawn>
+     <spawn x="8" y="3">
+      <entity type="1000" variant="0" subtype="0" weight="2" />
+    </spawn>
+     <spawn x="6" y="4">
+      <entity type="1000" variant="0" subtype="0" weight="2" />
+    </spawn>
+     <spawn x="8" y="4">
+      <entity type="1000" variant="0" subtype="0" weight="2" />
+    </spawn>
+     <spawn x="7" y="2">
+      <entity type="1000" variant="0" subtype="0" weight="2" />
+    </spawn>
+    <spawn x="6" y="4">
+      <entity type="1000" variant="0" subtype="0" weight="2" />
+    </spawn>
+     <spawn x="8" y="4">
+      <entity type="1000" variant="0" subtype="0" weight="2" />
+    </spawn>
+    <spawn x="6" y="2">
+      <entity type="1000" variant="0" subtype="0" weight="2" />
+    </spawn>
+    <spawn x="8" y="2">
+      <entity type="1000" variant="0" subtype="0" weight="2" />
+    </spawn>
+    <spawn x="6" y="5">
+      <entity type="1000" variant="0" subtype="0" weight="2" />
+    </spawn>
+     <spawn x="8" y="5">
+      <entity type="1000" variant="0" subtype="0" weight="2" />
+    </spawn>
   </room>
   <room type="1" variant="0" name="pooter" difficulty="1" weight="1" width="13" height="7">
     <door x="6" y="7" exists="True" />

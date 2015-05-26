@@ -7,6 +7,9 @@ from math import *
 class Fly(Enemy):
 	"""Simple enemy fly class"""
 
+	isFlying = False
+	dank = False
+
 	def __init__(self, xy, sounds, textures):
 		self.x, self.y = xy
 
@@ -18,6 +21,8 @@ class Fly(Enemy):
 		self.anim = Animation(self.frames, 0.04)
 
 		self.health = 2
+		self.speed = 1.5/GRATIO
+		self.hurtDistance = 0.8
 
 	def die(self):
 		if not self.dead:
@@ -25,31 +30,22 @@ class Fly(Enemy):
 			self.dead = True
 			self.sounds[-1].play() # Play death sound
 
-	def render(self, surface, time, character, obsticals):
-		speed = 1.5/GRATIO
+	def render(self, surface, time, character, nodes, paths):
 
-		ix, iy = (character.x-GRIDX)/GRATIO, (character.y-GRIDY)/GRATIO
-
-
-		dx, dy = (ix-self.x), (iy-self.y)
-
-		something = sqrt(dx**2+dy**2)
-
-		rx = dx/something
-		ry = dy/something
-
-		hurtDistance = 0.8
+		self.cx, self.cy = ix, iy = (character.x-GRIDX)/GRATIO, (character.y-GRIDY)/GRATIO
+		dx, dy = (self.cx-self.x), (self.cy-self.y)
 
 		if not self.dead:
-
-			self.x += speed*rx
-			self.y += speed*ry
+			if not self.dank:
+				self.pathFind((ix, iy), nodes, paths)
+				self.dank = True
+			self.move()
 
 			for t in character.tears:
 				tx = (t.x-GRIDX)/GRATIO
 				ty = (t.y-GRIDY)/GRATIO
 				dist = sqrt((tx-self.x)**2+(ty-self.y)**2)
-				if dist < 0.6 and not t.poped:
+				if dist < self.hurtDistance and not t.poped:
 					t.pop(True)
 					# TAKE DAMAGE HERE
 					self.die()
@@ -58,6 +54,8 @@ class Fly(Enemy):
 				fx, fy = (GRIDX+GRATIO*self.x, GRIDY+GRATIO*self.y)
 
 				character.hurt(1, fx, fy, time)
+
+
 
 			frame = self.anim.render(time)
 		else:
