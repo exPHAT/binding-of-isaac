@@ -27,7 +27,7 @@ class Enemy:
 			dx, dy = self.path[0][0]-self.x, self.path[0][1]-self.y
 		else:
 			dx, dy = self.cx-self.x, self.cy-self.y
-			
+
 		something = sqrt(dx**2+dy**2)
 
 		rx = dx/something
@@ -37,18 +37,20 @@ class Enemy:
 		self.y += self.speed*ry
 
 	def pathFind(self, xy, nodes, paths):
-		self.cx, self.cy = x, y = xy
+		self.cx, self.cy = x, y = list(map(round,xy))
 
 		if self.isFlying:
 			return
 
-		start, end = nodes[int(self.x)][int(self.y)], nodes[int(x)][int(y)]
+
+		start, end = nodes[round(self.x)][round(self.y)], nodes[x][y]
 
 		path = paths.search(start, end)
 		if path is None:
-			# STOP THE ENEMY
+			# There is no path found to the character
 
 			print("HELP NO PATH!")
+			print(self.x, self.y)
 			self.path = []
 		else:
 			for i in range(len(path)):

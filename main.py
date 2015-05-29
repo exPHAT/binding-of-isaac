@@ -54,9 +54,7 @@ def playMusic(name, intro=""):
 	else:
 		mixer.music.load(os.path.join('res', 'music', name))
 		mixer.music.play(-1)
-
-
-
+		
 def loadCFont(name, width, height, total):
 	f = image.load(os.path.join('res', 'fonts', name))
 	digits = [transform.scale(f.subsurface(width*i, 0, width, height), (width*2, height*2)) for i in range(total)]
