@@ -264,7 +264,7 @@ class Room:
 				objects = self.rocks + self.poops + self.fires
 
 				for other in self.other[::-1]:
-					if not other.render(surface, currTime, self.nodes, self.paths, ox=self.ax, oy=self.ay):
+					if not other.render(surface, currTime, objects, ox=self.ax, oy=self.ay):
 						self.other.remove(other)
 
 			return [0, 0]

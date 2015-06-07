@@ -23,6 +23,18 @@ def parseImage(image, startX, startY, width, height, xCount, yCount, total):
 	for i in range(total):
 		image.subsurface(i*width - ((i//xCount)*width*xCount), i*height , width, height)
 
+def generateSeed():
+	SEED_LENGTH = 8
+	characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	charLen = len(characters)
+	finalSeed = ""
+
+	for i in range(SEED_LENGTH):
+		finalSeed += characters[randint(0, SEED_LENGTH)]
+
+	# return finalSeed
+	return "EGAAHBBI"
+
 def findRooms(floor, possibleCoords, rooms):
 	rs = []
 	moves = [(0, 1), (0, -1), (1, 0), (-1, 0)]
