@@ -5,6 +5,9 @@ from Animation import *
 class Key:
 	"""Pickup Key class"""
 
+	collideable = False
+	pickedUp = False
+
 	def __init__(self, variant, xy, sounds, textures):
 		self.variant = variant
 		self.x = xy[0]
@@ -15,9 +18,6 @@ class Key:
 		self.bounds = Rect(GRIDX+GRATIO*self.x,GRIDY+GRATIO*self.y, 32, 64)
 
 		self.texture = self.textures.subsurface(0,0,32,64)
-
-		self.collideable = False
-		self.pickedUp = False
 
 	def pickup(self):
 		self.pickedUp = True

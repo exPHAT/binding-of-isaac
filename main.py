@@ -11,9 +11,9 @@
 # Boss
 # Next floor
 # Items
+# Load menu
 # Special controls - After menu
 # 
-
 
 from const import *
 from pygame import *
@@ -65,13 +65,31 @@ def playMusic(name, intro=""):
 	else:
 		mixer.music.load(os.path.join('res', 'music', name))
 		mixer.music.play(-1)
-		
+
 def loadCFont(name, width, height, total):
 	f = image.load(os.path.join('res', 'fonts', name))
 	digits = [transform.scale(f.subsurface(width*i, 0, width, height), (width*2, height*2)) for i in range(total)]
 
 	return digits
 
+def showSymbol(screen, length, index, textures):
+	start = cTime()
+	texture = textures["loading"][index]
+	w = texture.get_width()
+	h = texture.get_height()
+	running = True
+	while running:
+		for e in event.get():
+			if e.type == QUIT or e.type == KEYDOWN and e.key == 27:
+				quit()
+
+		screen.fill((0,0,0))
+		screen.blit(texture, (WIDTH//2-w//2,HEIGHT//2-h//2))
+
+		display.flip()
+
+		if cTime() - start >= length:
+			running = False
 
 display.set_caption("The Binding of Isaac: Rebirth")
 display.set_icon(image.load(os.path.join('res','textures', 'isaac.png')))
@@ -80,7 +98,7 @@ display.set_icon(image.load(os.path.join('res','textures', 'isaac.png')))
 textures = {
 	"hearts": loadTexture("hearts.png"),
 	"pickups": loadTexture("pickups.png"),
-	"character": darken(loadTexture("character.png"), .1),
+	"character": [darken(loadTexture("character.png"), .1)],
 	"floors": [loadTexture("basement.png"),
 			loadTexture("caves.png")],
 	"controls": loadTexture("controls.png"),
@@ -100,6 +118,7 @@ textures = {
 	"pickupHearts": loadTexture("pickup_hearts.png"),
 	"overlays": [loadTexture("%i.png"%i, dir="overlays") for i in range(5)],
 	"shading": loadTexture("shading.png"),
+	"loading": [loadTexture("%i.png"%(i+1), dir="loading") for i in range(56)],
 	"map": {
 		"background": loadTexture("minimap.png").subsurface(0, 0, 112, 102),
 		"in": loadTexture("minimap.png").subsurface(113, 0, 16, 16),
@@ -111,7 +130,6 @@ textures = {
 	"enemies": {
 		"fly": loadTexture("fly.png"),
 		"pooter": loadTexture("pooter.png"),
-
 	}
 }
 
@@ -150,12 +168,14 @@ while running:
 	characterType, floorSeed = menu(screen, jController, sounds,nextSong, changeSong)
 
 	# Floor setup
-
 	seed(floorSeed)
 
 	currTime = 0
 
 	clock = time.Clock()
+
+	playMusic("titleScreenJingle.ogg")
+	showSymbol(screen, 4, randint(0, 55), textures)
 
 	playMusic("basementLoop.ogg", intro="basementIntro.ogg")
 

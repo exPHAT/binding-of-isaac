@@ -69,7 +69,7 @@ class Game:
 		mHeight = self.minimap.get_height()
 		
 		posMoves = [[1, 0], [0, 1], [-1, 0], [0, -1]]
-		self.isaac = isaac = Character(WIDTH//2, (HEIGHT//4)*3, [[115, 100, 119, 97], [274, 275, 273, 276]], 1, 1, textures, sounds, fonts)
+		self.isaac = isaac = Character(self.characterType, (WIDTH//2, (HEIGHT//4)*3), [[115, 100, 119, 97], [274, 275, 273, 276]], textures, sounds, fonts)
 
 		floor[currentRoom].entered = True
 

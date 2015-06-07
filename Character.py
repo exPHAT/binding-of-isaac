@@ -10,16 +10,15 @@ from Key import *
 from Pickup import *
 from Heart import *
 from Bomb import *
+from Item import *
 
 class Character:
 	"""The main class for Isaac"""
 
-	def __init__(self, x, y, keys, xMod, yMod, textures, sounds, fonts):
-		self.x = x
-		self.y = y
-		self.xMod = xMod
-		self.yMod = yMod
-		self.textures = textures["character"]
+	def __init__(self, variant, xy, keys, textures, sounds, fonts):
+		self.variant = variant
+		self.x, self.y = xy
+		self.textures = textures["character"][variant]
 
 		self.tearTextures = textures["tears"]
 		self.tearSounds = sounds["tear"]
@@ -372,8 +371,8 @@ class Character:
 		if sum(map(int, [self.left, self.right, self.up, self.down])) > 1:
 			sizeModifier /= 1.414213 # So there is no benefit to going diagonal (sqrt(2))
 
-		dx = self.xVel * sizeModifier * self.speed * self.xMod
-		dy = self.yVel * sizeModifier * self.speed * self.yMod
+		dx = self.xVel * sizeModifier * self.speed
+		dy = self.yVel * sizeModifier * self.speed
 
 		inBoundsX = bounds.collidepoint(self.x+dx, self.y)
 		inBoundsY = bounds.collidepoint(self.x, self.y+dy)
@@ -418,6 +417,9 @@ class Character:
 					if ob.variant == 1: # Sould heart
 						self.specialFrame = 1
 						self.lastPickup = time
+				elif type(ob) == Item:
+					# ADD EM UP HERE
+					print("picked up that dank item")
 
 				if not ob.collideable and not rockColX and not rockColY:
 					rockColX = rockColY = False

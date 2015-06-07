@@ -8,6 +8,11 @@ from Animation import *
 class Bomb:
 	"""Droppable bomb class"""
 
+	collideable = False
+	pickedUp = False
+	exploded = False
+	fuse = 2
+
 	def __init__(self, parent, variant, xy, sounds, textures, explode=False):
 		self.variant = variant
 		self.x = xy[0]
@@ -18,15 +23,8 @@ class Bomb:
 
 		self.bounds = Rect(GRIDX+GRATIO*self.x,GRIDY+GRATIO*self.y, 32, 64)
 
-		self.pickedUp = False
-
 		self.shouldExplode = explode
-
-		self.fuse = 2
 		self.placed = cTime()
-		self.exploded = False
-
-		self.collideable = False
 
 		self.anim = Animation([textures[0].subsurface(0,0,64,64)], .2)
 
