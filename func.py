@@ -32,8 +32,7 @@ def generateSeed():
 	for i in range(SEED_LENGTH):
 		finalSeed += characters[randint(0, SEED_LENGTH)]
 
-	# return finalSeed
-	return "EGAAHBBI"
+	return finalSeed
 
 def findRooms(floor, possibleCoords, rooms):
 	rs = []
@@ -133,3 +132,40 @@ def loadSound(name):
 	s = mixer.Sound(os.path.join('res','sounds', name))
 
 	return s
+
+def loadCFont(name, width, height, total, size=2):
+	f = image.load(os.path.join('res', 'fonts', name))
+	digits = [transform.scale(f.subsurface(width*i, 0, width, height), list(map(int,(width*size, height*size)))) for i in range(total)]
+	space = Surface((width, height)).convert_alpha()
+	space.fill((0,0,0,0))
+	digits.append(space)
+
+	return digits
+
+def createSave(index, characterIndex, seed):
+	f = open("save-%i.dat"%(index+1), "w+")
+	f.write(str(characterIndex)+"\n"+seed)
+	f.close()
+
+def readSave(index):
+	f = open("save-%i.dat"%(index+1), "r")
+	data = f.read().split("\n")
+	f.close()
+	return int(data[0]), data[1]
+
+def deleteSave(index):
+	try:
+		os.remove("save-%i.dat"%(index+1))
+	except:
+		pass
+
+alph = "abcdefghijklmnopqrstuvwxyz0123456789 "
+
+def write(text, font):
+	width = font[0].get_width()
+	height = font[0].get_height()
+	writing = Surface((width*len(text), height)).convert_alpha()
+	writing.fill((0,0,0,0))
+	for i in range(len(text)):
+		writing.blit(font[alph.index(text[i].lower())], (i*width, 0))
+	return darken(writing, 0.80)

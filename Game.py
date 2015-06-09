@@ -4,6 +4,7 @@ from Character import *
 from Room import *
 from Bomb import *
 from time import time as cTime
+from pause import *
 import random
 
 class Game:
@@ -93,8 +94,10 @@ class Game:
 			k = key.get_pressed() # Current down keys
 
 			for e in event.get():
-				if e.type == QUIT or k[K_ESCAPE]: 
-					running = False
+				if e.type == QUIT:
+					quit() 
+				elif e.type == KEYDOWN and e.key == 27:
+					running = pause(screen, self.seed, textures, fonts, [self.isaac.speed, self.isaac.shotSpeed, self.isaac.damage, self.isaac.luck, self.isaac.shotRate, self.isaac.range])
 
 				elif e.type == KEYDOWN:
 					isaac.moving(e.key, True, False)

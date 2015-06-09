@@ -7,7 +7,7 @@ from math import *
 class Fly(Enemy):
 	"""Simple enemy fly class"""
 
-	isFlying = False
+	isFlying = True
 	dank = False
 	health = 2
 	weight = 1

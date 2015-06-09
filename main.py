@@ -11,7 +11,6 @@
 # Boss
 # Next floor
 # Items
-# Load menu
 # Special controls - After menu
 # 
 
@@ -66,12 +65,6 @@ def playMusic(name, intro=""):
 		mixer.music.load(os.path.join('res', 'music', name))
 		mixer.music.play(-1)
 
-def loadCFont(name, width, height, total):
-	f = image.load(os.path.join('res', 'fonts', name))
-	digits = [transform.scale(f.subsurface(width*i, 0, width, height), (width*2, height*2)) for i in range(total)]
-
-	return digits
-
 def showSymbol(screen, length, index, textures):
 	start = cTime()
 	texture = textures["loading"][index]
@@ -92,13 +85,13 @@ def showSymbol(screen, length, index, textures):
 			running = False
 
 display.set_caption("The Binding of Isaac: Rebirth")
-display.set_icon(image.load(os.path.join('res','textures', 'isaac.png')))
+display.set_icon(image.load(os.path.join('res','textures', 'icon.png')))
 
 # Load all needed textures
 textures = {
 	"hearts": loadTexture("hearts.png"),
 	"pickups": loadTexture("pickups.png"),
-	"character": [darken(loadTexture("character.png"), .1)],
+	"character": [darken(loadTexture(["lazarus.png", "isaac.png", "eve.png"][i]), .1) for i in range(3)],
 	"floors": [loadTexture("basement.png"),
 			loadTexture("caves.png")],
 	"controls": loadTexture("controls.png"),
@@ -119,6 +112,9 @@ textures = {
 	"overlays": [loadTexture("%i.png"%i, dir="overlays") for i in range(5)],
 	"shading": loadTexture("shading.png"),
 	"loading": [loadTexture("%i.png"%(i+1), dir="loading") for i in range(56)],
+	"pauseCard": loadTexture("pauseCard.png", dir="pause"),
+	"seedCard": loadTexture("seedcard.png", dir="pause"),
+	"arrow": loadTexture("arrow.png", dir="pause", double=False),
 	"map": {
 		"background": loadTexture("minimap.png").subsurface(0, 0, 112, 102),
 		"in": loadTexture("minimap.png").subsurface(113, 0, 16, 16),
@@ -155,16 +151,21 @@ sounds = {
 	"doorClose": loadSound("doorClose.wav"),
 	"deathBurst": loadSound("deathBurst.wav"),
 	"pageTurn": loadSound("pageTurn.wav"),
+	"error": loadSound("error.wav"),
+	"selectLeft": loadSound("selectLeft.wav"),
+	"selectRight": loadSound("selectRight.wav"),
 }
 
 # Load fonts
 fonts = {
-	"main": loadCFont("main.png", 20, 16, 26),
-	"pickups": loadCFont("pickup.png", 10, 12, 10)
+	"main": loadCFont("main.png", 20, 16, 36),
+	"pickups": loadCFont("pickup.png", 10, 12, 10),
+	"ticks": loadCFont("ticks.png", 4, 17 , 8),
 }
 
 running = True
 while running:
+	playMusic("titleScreenLoop.ogg", intro="titleScreenIntro.ogg")
 	characterType, floorSeed = menu(screen, jController, sounds,nextSong, changeSong)
 
 	# Floor setup

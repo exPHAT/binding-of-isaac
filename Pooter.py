@@ -25,7 +25,7 @@ class Pooter(Enemy):
 			self.dead = True
 			self.sounds[-1].play() # Play death sound
 
-	def render(self, surface, time, character, obsticals):
+	def render(self, surface, time, character, nodes, paths):
 		speed = 1.5/GRATIO
 
 		ix, iy = (character.x-GRIDX)/GRATIO, (character.y-GRIDY)/GRATIO
