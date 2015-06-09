@@ -75,6 +75,15 @@
       <entity type="5" variant="30" subtype="1" weight="2" />
     </spawn>
   </room>
+  <room type="1" variant="0" name="key" difficulty="1" weight="1" width="13" height="7">
+    <door x="6" y="-1" exists="True" />
+    <door x="-1" y="3" exists="True" />
+    <door x="13" y="3" exists="True" />
+    <door x="6" y="7" exists="True" />
+    <spawn x="6" y="3">
+      <entity type="5" variant="50" subtype="1" weight="2" />
+    </spawn>
+  </room>
   <room type="1" variant="0" name="red heart" difficulty="1" weight="1" width="13" height="7">
     <door x="6" y="-1" exists="True" />
     <door x="-1" y="3" exists="True" />

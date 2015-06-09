@@ -20,9 +20,11 @@ class Game:
 		random.seed(self.seed)
 
 	def setup(self):
-		floor = loadFloor("basement.xml", self.floorIndex, randint(8, 12), self.sounds, self.textures)
+		floor = loadFloor(["basement.xml", "basement.xml", "basement.xml", "basement.xml", "basement.xml", "basement.xml", "basement.xml"][self.floorIndex], self.floorIndex, randint(8, 12), self.sounds, self.textures)
 		adjecent = [-1,0], [0, 1], [1, 0], [0, -1]
 		doorPoss = [[13, 3], [6,7], [-1,3], [6,-1]]
+
+		self.isaac.x, self.isaac.y = (WIDTH//2, (HEIGHT//4)*3)
 
 		for coord in floor:
 			for i in range(len(adjecent)):
@@ -51,9 +53,27 @@ class Game:
 		for room in self.floor:
 			self.floor[room].renderMap(self.minimap, currentRoom, True)
 
+	def updateFloor(self):
+		self.floor[self.currentRoom].entered = True
+
+		for m in self.posMoves:
+			mx, my = m
+			x, y = self.currentRoom
+			newPos = (mx+x, my+y)
+
+			try:
+				self.floor[newPos].seen = True
+			except:
+				pass
+
+		self.updateMinimap(self.currentRoom)
+
+
 	def run(self, screen, sounds, textures, fonts, joystick=None):
 		animatingRooms = self.animatingRooms
 		currentRoom = self.currentRoom
+
+		self.isaac = isaac = Character(self.characterType, (WIDTH//2, (HEIGHT//4)*3), [[115, 100, 119, 97], [274, 275, 273, 276]], textures, sounds, fonts)
 
 		self.sounds = sounds
 		self.textures = textures
@@ -64,28 +84,17 @@ class Game:
 		clock = time.Clock()
 
 		self.minimap = Surface((textures["map"]["background"].get_width(), textures["map"]["background"].get_height())).convert_alpha()
-		self.updateMinimap(currentRoom)
+		self.updateMinimap(self.currentRoom)
 		self.minimap.set_clip(Rect(4, 4, 100, 86))
 		mWidth = self.minimap.get_width()
 		mHeight = self.minimap.get_height()
 		
-		posMoves = [[1, 0], [0, 1], [-1, 0], [0, -1]]
-		self.isaac = isaac = Character(self.characterType, (WIDTH//2, (HEIGHT//4)*3), [[115, 100, 119, 97], [274, 275, 273, 276]], textures, sounds, fonts)
+		self.posMoves = [[1, 0], [0, 1], [-1, 0], [0, -1]]
+		posMoves = self.posMoves
 
-		floor[currentRoom].entered = True
+		self.isaac.game = self
 
-		for m in posMoves:
-			mx, my = m
-			x, y = currentRoom
-			newPos = (mx+x, my+y)
-
-			try:
-				floor[newPos].seen = True
-			except:
-				pass
-
-
-		self.updateMinimap(currentRoom)
+		self.updateFloor()
 
 		running = True
 		while running:
@@ -105,11 +114,13 @@ class Game:
 						isaac.hurt(1, currTime)
 					elif e.unicode == "e":
 						if isaac.pickups[1].use(1):
-							floor[currentRoom].other.append(Bomb(floor[currentRoom], 0, ((isaac.x-GRIDX)/GRATIO, (isaac.y-GRIDY)/GRATIO), [sounds["explosion"]], textures["bombs"], explode=True))
+							self.floor[self.currentRoom].other.append(Bomb(self.floor[self.currentRoom], 0, ((isaac.x-GRIDX)/GRATIO, (isaac.y-GRIDY)/GRATIO), [sounds["explosion"]], textures["bombs"], explode=True))
 					elif e.unicode == "t":
 						isaac.pickups[1].add(3)
 					elif e.unicode == "h":
 						isaac.hurt(1, 0, 0, currTime)
+					elif e.unicode == "q":
+						isaac.usePill()
 					elif e.unicode == "m":
 						print(self.seed)
 
@@ -123,39 +134,39 @@ class Game:
 						animatingRooms.remove(r)
 			else:
 				screen.fill((0,0,0))
-				move = floor[currentRoom].render(screen, isaac, currTime)
+				move = self.floor[self.currentRoom].render(screen, isaac, currTime)
 				if move[0] != 0 or move[1] != 0:
-					old = tuple(currentRoom[:])
+					old = tuple(self.currentRoom[:])
 
-					currentRoom = (move[0]+currentRoom[0], move[1]+currentRoom[1])
+					self.currentRoom = (move[0]+self.currentRoom[0], move[1]+self.currentRoom[1])
 					try:
-						floor[currentRoom].animateIn(move)
-						floor[old].animateOut(move)
+						self.floor[self.currentRoom].animateIn(move)
+						self.floor[old].animateOut(move)
 
-						animatingRooms.append(floor[currentRoom])
-						animatingRooms.append(floor[old])
+						animatingRooms.append(self.floor[self.currentRoom])
+						animatingRooms.append(self.floor[old])
 
 						isaac.x += 650*(-move[0])
 						isaac.y += 338*(move[1])
 
 						isaac.clearTears()
 
-						floor[currentRoom].entered = True
+						self.floor[self.currentRoom].entered = True
 
 						for m in posMoves:
 							mx, my = m
-							x, y = currentRoom
+							x, y = self.currentRoom
 							newPos = (mx+x, my+y)
 
 							try:
-								floor[newPos].seen = True
+								self.floor[newPos].seen = True
 							except:
 								pass
 
-						self.updateMinimap(currentRoom)
+						self.updateMinimap(self.currentRoom)
 
 					except:
-						currentRoom = old
+						self.currentRoom = old
 
 			# DRAW MAP
 			screen.blit(self.minimap, (MAPX-mWidth//2, MAPY-mHeight//2))

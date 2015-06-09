@@ -11,6 +11,8 @@ from Pickup import *
 from Heart import *
 from Bomb import *
 from Item import *
+from Pill import *
+from Trapdoor import *
 
 class Character:
 	"""The main class for Isaac"""
@@ -28,7 +30,7 @@ class Character:
 
 		self.dead = False
 		self.isFlying = False
-
+		self.pill = None
 		self.lastHurt = -1
 
 		self.tears = []
@@ -168,6 +170,17 @@ class Character:
 		if self.hearts[0].health == 0:
 			self.die()
 
+	def usePill(self):
+		if self.pill != None:
+			st = self.pill.stats # The pills statss
+			self.speed += st[0]
+			self.shotRate += st[1]
+			self.damage += st[2]
+			self.range += st[3]
+			self.shotSpeed += st[4]
+			self.luck += st[5]
+			
+			self.pill = None
 
 	def die(self):
 		self.dead = True
@@ -417,6 +430,14 @@ class Character:
 					if ob.variant == 1: # Sould heart
 						self.specialFrame = 1
 						self.lastPickup = time
+				elif type(ob) == Pill:
+					self.pill = ob
+					ob.pickup()
+				elif type(ob) == Trapdoor:
+					self.game.floorIndex += 1
+					self.game.currentRoom = (0,0)
+					self.game.setup()
+					self.game.updateFloor()
 				elif type(ob) == Item:
 					# ADD EM UP HERE
 					print("picked up that dank item")
@@ -480,6 +501,9 @@ class Character:
 
 		for p in self.pickups:
 			p.render(surface)
+
+		if self.pill != None:
+			surface.blit(self.pill.texture, (WIDTH-80, HEIGHT-60))
 
 		# draw.rect(surface, (255,0,0), self.bodyRect)
 

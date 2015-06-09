@@ -19,7 +19,6 @@ def pause(screen, seed, textures, fonts, stats):
     slide = darken(screen.copy(), .6)
     for i in range(0,960,50):
         clock.tick(60)
-        print(clock.get_fps())
         screen.blit(slide,(0,0))
         screen.blit(pausecard,(250-960+i,50))
         screen.blit(seedcard,(170-960+i,50))
@@ -64,14 +63,12 @@ def pause(screen, seed, textures, fonts, stats):
         for i in range(luck):
             screen.blit(ticker[i],(545+(i*8),260))
 
-        clock.tick(60)
-        print(clock.get_fps())                
+        clock.tick(60)               
 
         display.flip()
 
     for i in range(0,960,50):
         clock.tick(60)
-        print(clock.get_fps())
         screen.blit(slide,(0,0))
         screen.blit(pausecard,(250+i,50))
         screen.blit(seedcard,(170+i,50))

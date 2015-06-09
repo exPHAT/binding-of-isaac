@@ -93,7 +93,13 @@ textures = {
 	"pickups": loadTexture("pickups.png"),
 	"character": [darken(loadTexture(["lazarus.png", "isaac.png", "eve.png"][i]), .1) for i in range(3)],
 	"floors": [loadTexture("basement.png"),
-			loadTexture("caves.png")],
+			loadTexture("caves.png"),
+			loadTexture("catacombs.png"),
+			loadTexture("depths.png"),
+			loadTexture("necropolis.png"),
+			loadTexture("womb.png"),
+			loadTexture("utero.png"),
+			],
 	"controls": loadTexture("controls.png"),
 	"doors": [loadTexture("door.png"),
 			loadTexture("treasure_door.png"),
@@ -115,6 +121,8 @@ textures = {
 	"pauseCard": loadTexture("pauseCard.png", dir="pause"),
 	"seedCard": loadTexture("seedcard.png", dir="pause"),
 	"arrow": loadTexture("arrow.png", dir="pause", double=False),
+	"pills": loadTexture("pills.png"),
+	"trapdoor": loadTexture("trap_door.png"),
 	"map": {
 		"background": loadTexture("minimap.png").subsurface(0, 0, 112, 102),
 		"in": loadTexture("minimap.png").subsurface(113, 0, 16, 16),
@@ -158,7 +166,7 @@ sounds = {
 
 # Load fonts
 fonts = {
-	"main": loadCFont("main.png", 20, 16, 36),
+	"main": loadCFont("main.png", 20, 16, 36, size=1.8),
 	"pickups": loadCFont("pickup.png", 10, 12, 10),
 	"ticks": loadCFont("ticks.png", 4, 17 , 8),
 }

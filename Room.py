@@ -13,6 +13,8 @@ from Fly import *
 from Pooter import *
 from Heart import *
 from Bomb import *
+from Pill import *
+from Trapdoor import *
 
 import func
 
@@ -46,7 +48,7 @@ class Room:
 		backdrop.blit(transform.flip(texture, False, True), (0, 143*2))
 		backdrop.blit(transform.flip(texture, True, True), (221*2, 143*2))
 
-		if xy[0] == 0 and xy[1] == 0:
+		if floor == 0 and xy[0] == 0 and xy[1] == 0:
 			controls = textures["controls"]
 			backdrop.blit(controls, (113, 203))
 
@@ -117,10 +119,13 @@ class Room:
 					self.other.append(Key(0, (x, y), [self.sounds["keyDrop"], self.sounds["keyPickup"]], self.textures["keys"]))
 				elif typ == 5 and var == 40:
 					self.other.append(Bomb(self, 0, (x, y), [self.sounds["explosion"]], self.textures["bombs"], explode=False))
+				elif typ == 5 and var == 50:
+					self.other.append(Pill((x, y), self.textures["pills"]))
 				elif typ == 13:
 					self.enemies.append(Fly((x, y), [self.sounds["deathBurst"]], self.textures["enemies"]["fly"]))
 				elif typ == 14:
 					self.enemies.append(Pooter((x, y), [self.sounds["deathBurst"]], self.textures["enemies"]["pooter"]))
+
 
 
 	def addDoor(self, xy, variant, isOpen):
@@ -199,6 +204,9 @@ class Room:
 		else:
 			for door in self.doors:
 				door.open()
+
+			if self.variant == 2 and not Trapdoor in list(map(type, self.other)):
+				self.other.append(Trapdoor(self.textures["trapdoor"]))
 
 		if not self.animating:
 			surface.blit(self.backdrop, (38,-16))

@@ -1,14 +1,22 @@
 from glob import glob
 
 names = glob("*.py")
+names.remove("lineCount.py")
 
 count = 0
+comments = 0
+total = 0
 
 for n in names:
 	f = open(n)
 
-	count += int(f.read().count("\n"))
+	content = f.read()
+
+	count += int(content.count("\n"))
+	comments += int(content.count("#"))
+	total += len(content)
 
 	f.close()
 
-print(count)
+# print(count-comments)
+print(total)
