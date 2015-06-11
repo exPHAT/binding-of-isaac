@@ -21,7 +21,10 @@ class Bomb:
 		self.textures = textures
 		self.parent = parent
 
-		self.bounds = Rect(GRIDX+GRATIO*self.x,GRIDY+GRATIO*self.y, 32, 64)
+		if not explode:
+			self.bounds = Rect(GRIDX+GRATIO*self.x,GRIDY+GRATIO*self.y, 32, 64)
+		else:
+			self.bounds = Rect(0,0,0,0)
 
 		self.shouldExplode = explode
 		self.placed = cTime()
