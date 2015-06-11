@@ -3,6 +3,8 @@ import os
 from Room import *
 from Gurdy import *
 
+alph = "abcdefghijklmnopqrstuvwxyz0123456789 "
+
 def darken(image, ammount):
 	nImage = image.copy()
 
@@ -160,8 +162,6 @@ def deleteSave(index):
 		os.remove("save-%i.dat"%(index+1))
 	except:
 		pass
-
-alph = "abcdefghijklmnopqrstuvwxyz0123456789 "
 
 def write(text, font):
 	width = font[0].get_width()

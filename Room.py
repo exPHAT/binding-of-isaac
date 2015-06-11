@@ -17,6 +17,7 @@ from Pill import *
 from Trapdoor import *
 from Maw import *
 from Boil import *
+from Host import *
 
 import func
 
@@ -127,8 +128,8 @@ class Room:
 					self.enemies.append(Boil((x, y), self.sounds, self.textures))
 				elif typ == 14:
 					self.enemies.append(Pooter((x, y), [self.sounds["deathBurst"]], self.textures["enemies"]["pooter"]))
-
-
+				# elif typ == 15:
+					# self.enemies.append(Maw((x, y), [self.sounds["deathBurst"]], self.textures["enemies"]["maw"]))
 
 	def addDoor(self, xy, variant, isOpen):
 		x, y = xy

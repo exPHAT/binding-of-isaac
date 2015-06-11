@@ -5,6 +5,7 @@ from Fly import *
 
 class Maw(Fly):
 	hurtDistance = 1
+	health = 4
 	isFlying = True
 
 	def __init__(self, xy, sounds, textures):

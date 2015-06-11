@@ -8,7 +8,7 @@ class Gurdy(Enemy):
 	x = 6
 	y = 3
 
-	health = 10
+	health = 30
 	hurtDistance = 2
 
 	def __init__(self, texture, sounds):

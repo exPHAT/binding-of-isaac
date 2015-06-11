@@ -13,6 +13,7 @@ class Enemy:
 	cx, cx = 0, 0
 	health = 1
 	weight = 1
+	canHurt = True
 
 	tears = []
 
@@ -35,8 +36,8 @@ class Enemy:
 				dist = sqrt((tx-self.x)**2+(ty-self.y)**2)
 				if dist < self.hurtDistance and not t.poped:
 					t.pop(True)
-					# TAKE DAMAGE HERE
-					self.hurt(1)
+					if self.canHurt:
+						self.hurt(t.damage)
 
 			if abs(dx) < 0.8 and abs(dy) < 0.8:
 				fx, fy = (GRIDX+GRATIO*self.x, GRIDY+GRATIO*self.y)
@@ -45,7 +46,7 @@ class Enemy:
 
 		for tear in self.tears:
 			dist = sqrt((tear.x-character.x)**2+(tear.y-character.y)**2)
-			if dist/GRATIO <= character.hurtDistance:
+			if dist/GRATIO <= character.hurtDistance and not tear.poped:
 				character.hurt(tear.damage, tear.x, tear.y, time)
 				tear.pop(True)
 
@@ -87,8 +88,6 @@ class Enemy:
 		if path is None:
 			# There is no path found to the character
 
-			print("HELP NO PATH!")
-			print(self.x, self.y)
 			self.path = []
 		else:
 			for i in range(len(path)):

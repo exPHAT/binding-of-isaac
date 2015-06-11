@@ -9,7 +9,7 @@ class Fly(Enemy):
 
 	isFlying = True
 	pathed = False
-	health = 2
+	health = 4
 	weight = 1
 	hurtDistance = 0.8
 
@@ -32,6 +32,9 @@ class Fly(Enemy):
 			self.sounds[-1].play() # Play death sound
 
 	def render(self, surface, time, character, nodes, paths, bounds, obsticals):
+
+		self.cx, self.cy = ix, iy = (character.x-GRIDX)/GRATIO, (character.y-GRIDY)/GRATIO
+		dx, dy = (self.cx-self.x), (self.cy-self.y)
 
 		if not self.dead:
 			if not self.pathed:

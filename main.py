@@ -134,6 +134,7 @@ textures = {
 		"pooter": loadTexture("pooter.png", dir="enemies"),
 		"maw": loadTexture("maw.png", dir="enemies"),
 		"boil": loadTexture("boil.png", dir="enemies"),
+		"host": loadTexture("host.png", dir="enemies"),
 	},
 	"bosses": {
 		"gurdy": loadTexture("gurdy.png", dir="bosses"),

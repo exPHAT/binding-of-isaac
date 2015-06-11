@@ -8,6 +8,7 @@ class Pooter(Enemy):
 	"""Simple enemy fly class"""
 
 	hurtDistance = 0.6
+	health = 3
 
 	def __init__(self, xy, sounds, textures):
 		self.x, self.y = xy

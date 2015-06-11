@@ -112,6 +112,7 @@ def menu(screen, jController, sounds, nextSong, changeSong):
 					edit = False
 			if e.type == KEYDOWN and menu == "options" and e.key == 32 and optionpoint == 10:
 				controldisplay = defaultdisplay[:]
+
 				controls = defaultcontrols[:]
 
 			if e.type == KEYDOWN and menu == "seed" and e.key != 8 and e.key != 27:
@@ -150,7 +151,7 @@ def menu(screen, jController, sounds, nextSong, changeSong):
 				elif e.key == 308:
 					controldisplay[optionpoint] = "Alt"
 					controls[optionpoint] = e.key
-				else:
+				elif e.unicode in alph:
 					controldisplay[optionpoint] = e.unicode.upper()
 					controls[optionpoint] = e.key
 				edit = False
