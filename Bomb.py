@@ -34,7 +34,11 @@ class Bomb:
 		self.parent.backdrop.blit(self.textures[2].subsurface(192*randint(0,1), 128*randint(0,1), 192, 128), ((GRIDX + GRATIO*self.x) - 128, (GRIDY + GRATIO*self.y) - 32))
 		for ob in objects:
 			if sqrt((ob.x-self.x)**2 + (ob.y-self.y)**2) < 2:
-				ob.destroy()
+				# Try to hur the enemy, if its not an entity, destroy it
+				try:
+					ob.destroy()
+				except:
+					ob.hurt(2)
 
 	def pickup(self):
 		if not self.shouldExplode:

@@ -16,10 +16,18 @@ class Door:
 
 	# ROOMS ARE 13 x 7
 
-	def __init__(self, side, variant, isOpen, texture, sounds):
+	def __init__(self, floor, side, variant, isOpen, texture, sounds):
 		self.side = side
 		self.variant = variant
-		self.texture = func.darken(texture[variant], .25)
+		self.texture = texture[variant]
+		if self.variant == 0:
+			if floor < 3:
+				self.texture = self.texture[0]
+			elif floor < 5:
+				self.texture = self.texture[1]
+			else:
+				self.texture = self.texture[2]
+		self.texture = func.darken(self.texture, .25)
 		self.sounds = sounds
 
 		self.isOpen = isOpen

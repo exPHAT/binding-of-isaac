@@ -12,4 +12,4 @@ class Pill(Item):
 		self.texture = texture.subsurface(randint(0,2)*64, randint(0,2)*64, 64, 64)
 		self.bounds = Rect(GRIDX+GRATIO*self.x,GRIDY+GRATIO*self.y, 32, 64)
 		self.stats = [0]*6
-		self.stats[randint(0,5)] = 1
+		self.stats[randint(0,5)] = 1 if randint(0,1) else -1

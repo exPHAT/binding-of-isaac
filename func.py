@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as xml
 import os
 from Room import *
+from Gurdy import *
 
 def darken(image, ammount):
 	nImage = image.copy()
@@ -104,6 +105,7 @@ def loadFloor(name, index, size, sounds, textures):
 			break
 
 	floor[bossRoom] = Room(index, 2, bossRoom, d[0], textures, sounds)
+	floor[bossRoom].enemies.append(Gurdy(textures["bosses"]["gurdy"], sounds))
 
 	return floor
 

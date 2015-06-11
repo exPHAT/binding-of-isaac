@@ -18,5 +18,6 @@ for n in names:
 
 	f.close()
 
-# print(count-comments)
-print(total)
+print("Line count:",count)
+print("Without comments:",count-comments)
+print("Characters:", total)

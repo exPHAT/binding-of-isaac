@@ -15,6 +15,8 @@ from Heart import *
 from Bomb import *
 from Pill import *
 from Trapdoor import *
+from Maw import *
+from Boil import *
 
 import func
 
@@ -122,7 +124,7 @@ class Room:
 				elif typ == 5 and var == 50:
 					self.other.append(Pill((x, y), self.textures["pills"]))
 				elif typ == 13:
-					self.enemies.append(Fly((x, y), [self.sounds["deathBurst"]], self.textures["enemies"]["fly"]))
+					self.enemies.append(Boil((x, y), self.sounds, self.textures))
 				elif typ == 14:
 					self.enemies.append(Pooter((x, y), [self.sounds["deathBurst"]], self.textures["enemies"]["pooter"]))
 
@@ -133,7 +135,7 @@ class Room:
 		
 		
 		side = [[6,7], [13, 3], [6,-1], [-1,3]].index([x,y])
-		self.doors.append(Door(side, variant, isOpen, self.textures["doors"], self.sounds))
+		self.doors.append(Door(self.floor, side, variant, isOpen, self.textures["doors"], self.sounds))
 
 	def addOther(self, xy):
 		self.other.append(Explosion(0, xy, self.sounds["explosion"], self.textures["explosions"]))
@@ -205,7 +207,7 @@ class Room:
 			for door in self.doors:
 				door.open()
 
-			if self.variant == 2 and not Trapdoor in list(map(type, self.other)):
+			if self.variant == 2 and self.floor < 6 and not Trapdoor in list(map(type, self.other)):
 				self.other.append(Trapdoor(self.textures["trapdoor"]))
 
 		if not self.animating:
@@ -226,7 +228,7 @@ class Room:
 			objects = self.rocks + self.poops + self.fires
 
 			for other in self.other[::-1]:
-					if not other.render(surface, currTime, objects):
+					if not other.render(surface, currTime, objects+self.enemies):
 						self.other.remove(other)
 
 			everything = objects+self.other
@@ -238,7 +240,7 @@ class Room:
 					enemy.pathFind((cx,cy), self.nodes, self.paths)
 
 			for enemy in self.enemies[:]:
-				if not enemy.render(surface, currTime, character, self.nodes, self.paths):
+				if not enemy.render(surface, currTime, character, self.nodes, self.paths, self.levelBounds, objects):
 					self.enemies.remove(enemy)
 
 			move = character.render(surface, currTime, self.levelBounds, everything, self.doors)

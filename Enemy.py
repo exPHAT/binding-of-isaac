@@ -14,11 +14,44 @@ class Enemy:
 	health = 1
 	weight = 1
 
+	tears = []
+
+	hurtDistance = 0.8
+
 	def hurt(self, ammount):
 		if not self.dead:
 			self.health -= ammount
 			if self.health <= 0:
 				self.die()
+
+	def checkHurt(self, character, time):
+		self.cx, self.cy = ix, iy = (character.x-GRIDX)/GRATIO, (character.y-GRIDY)/GRATIO
+		dx, dy = (self.cx-self.x), (self.cy-self.y)
+
+		if not self.dead:
+			for t in character.tears:
+				tx = (t.x-GRIDX)/GRATIO
+				ty = (t.y-GRIDY)/GRATIO
+				dist = sqrt((tx-self.x)**2+(ty-self.y)**2)
+				if dist < self.hurtDistance and not t.poped:
+					t.pop(True)
+					# TAKE DAMAGE HERE
+					self.hurt(1)
+
+			if abs(dx) < 0.8 and abs(dy) < 0.8:
+				fx, fy = (GRIDX+GRATIO*self.x, GRIDY+GRATIO*self.y)
+
+				character.hurt(1, fx, fy, time)
+
+		for tear in self.tears:
+			dist = sqrt((tear.x-character.x)**2+(tear.y-character.y)**2)
+			if dist/GRATIO <= character.hurtDistance:
+				character.hurt(tear.damage, tear.x, tear.y, time)
+				tear.pop(True)
+
+	def die(self):
+		if not self.dead:
+			self.dead = True
 
 	def move(self):
 		if not self.isFlying and len(self.path) != 0:
@@ -62,3 +95,6 @@ class Enemy:
 				p = path[i]
 				path[i] = (p.x, p.y)
 			self.path = path[1:]
+
+	def render(self, surface, time, character, nodes, paths, bounds, obsticals):
+		pass

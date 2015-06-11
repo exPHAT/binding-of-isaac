@@ -17,6 +17,8 @@ from Trapdoor import *
 class Character:
 	"""The main class for Isaac"""
 
+	hurtDistance = .6
+
 	def __init__(self, variant, xy, keys, textures, sounds, fonts):
 		self.variant = variant
 		self.x, self.y = xy
@@ -366,7 +368,7 @@ class Character:
 
 
 		if self.lastTearKey in self.lastTearKeys and time-self.lastTear >= (8-self.shotRate)/18:
-			self.tears.append(Tear(self.lastTearKey, (self.x, self.y-20), (self.xVel*1.5, self.yVel*1.5), self.shotSpeed, self.damage, self.range, True, self.tearTextures, self.tearSounds))
+			self.tears.append(Tear([(0, 1), (1, 0), (0, -1), (-1, 0)][self.lastTearKey], (self.x, self.y-20), (self.xVel*1.5, self.yVel*1.5), self.shotSpeed, self.damage, self.range, True, self.tearTextures, self.tearSounds))
 			self.lastTear = time
 		elif time-self.lastTear <= 0.1:
 			try:

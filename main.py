@@ -7,9 +7,7 @@
 #
 # TODO:
 # Enemy knockback
-# Implement new menu
 # Boss
-# Next floor
 # Items
 # Special controls - After menu
 # 
@@ -101,7 +99,7 @@ textures = {
 			loadTexture("utero.png"),
 			],
 	"controls": loadTexture("controls.png"),
-	"doors": [loadTexture("door.png"),
+	"doors": [[loadTexture("door.png"), loadTexture("dark_door.png"), loadTexture("red_door.png")],
 			loadTexture("treasure_door.png"),
 			loadTexture("boss_door.png"),
 			loadTexture("devil_door.png"),
@@ -132,8 +130,13 @@ textures = {
 		"boss": loadTexture("minimap.png").subsurface(113, 64, 16, 16),
 	},
 	"enemies": {
-		"fly": loadTexture("fly.png"),
-		"pooter": loadTexture("pooter.png"),
+		"fly": loadTexture("fly.png", dir="enemies"),
+		"pooter": loadTexture("pooter.png", dir="enemies"),
+		"maw": loadTexture("maw.png", dir="enemies"),
+		"boil": loadTexture("boil.png", dir="enemies"),
+	},
+	"bosses": {
+		"gurdy": loadTexture("gurdy.png", dir="bosses"),
 	}
 }
 

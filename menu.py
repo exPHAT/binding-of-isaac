@@ -88,6 +88,9 @@ def menu(screen, jController, sounds, nextSong, changeSong):
 			if e.type == QUIT:
 				running = False
 
+			if e.type == KEYDOWN and menu == "main" and e.key == 27:
+				quit()
+
 			if e.type == KEYDOWN and menu == "selection" and e.key == 273:
 				arrowpoint -= 1
 			elif e.type == KEYDOWN and menu == "selection" and e.key == 274:

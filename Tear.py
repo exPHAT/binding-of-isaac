@@ -6,8 +6,8 @@ from Animation import *
 class Tear:
 	"""Main tear class"""
 
-	def __init__(self, direction, xy, ixy, speed, damage, shotRange, friendly, textures, sounds):
-		self.direction = direction
+	def __init__(self, xyv, xy, ixy, speed, damage, shotRange, friendly, textures, sounds):	
+		self.xVel, self.yVel = xyv # X, Y velocity
 		self.speed = int(speed*2)+4
 		self.damage = damage+3
 		self.friendly = friendly
@@ -71,18 +71,8 @@ class Tear:
 			dx = 0
 			dy = 0
 
-			if self.direction == 0:
-				# Down
-				dy += self.speed
-			elif self.direction == 1:
-				# Right
-				dx += self.speed
-			elif self.direction == 2:
-				# Up
-				dy -= self.speed
-			elif self.direction == 3:
-				# Left
-				dx -= self.speed
+			dx += self.xVel * self.speed
+			dy += self.yVel * self.speed
 
 			dx += self.iXVel
 			dy += self.iYVel

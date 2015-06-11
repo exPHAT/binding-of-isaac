@@ -7,6 +7,8 @@ from math import *
 class Pooter(Enemy):
 	"""Simple enemy fly class"""
 
+	hurtDistance = 0.6
+
 	def __init__(self, xy, sounds, textures):
 		self.x, self.y = xy
 
@@ -25,7 +27,7 @@ class Pooter(Enemy):
 			self.dead = True
 			self.sounds[-1].play() # Play death sound
 
-	def render(self, surface, time, character, nodes, paths):
+	def render(self, surface, time, character, nodes, paths, bounds, obsticals):
 		speed = 1.5/GRATIO
 
 		ix, iy = (character.x-GRIDX)/GRATIO, (character.y-GRIDY)/GRATIO
@@ -45,19 +47,8 @@ class Pooter(Enemy):
 			self.x += speed*rx
 			self.y += speed*ry
 
-			for t in character.tears:
-				tx = (t.x-GRIDX)/GRATIO
-				ty = (t.y-GRIDY)/GRATIO
-				dist = sqrt((tx-self.x)**2+(ty-self.y)**2)
-				if dist < 0.6 and not t.poped:
-					t.pop(True)
-					# TAKE DAMAGE HERE
-					self.die()
+			self.checkHurt(character, time)
 
-			if abs(dx) < 0.8 and abs(dy) < 0.8:
-				fx, fy = (GRIDX+GRATIO*self.x, GRIDY+GRATIO*self.y)
-
-				character.hurt(1, fx, fy, time)
 
 			frame = self.anim.render(time)
 		else:

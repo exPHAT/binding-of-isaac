@@ -2,12 +2,13 @@ from pygame import *
 from time import time as cTime
 
 class Animation:
-	"""Class for all animations"""
+	"""Class to handle all animation timing"""
 
-	def __init__(self, frames, interval):
+	def __init__(self, frames, interval, shouldLoop=True):
 		self.frames = frames
 		self.frameCount = len(self.frames)
 		self.interval = interval/self.frameCount # Wait between frames
+		self.shouldLoop = shouldLoop
 
 		self.lastFrame = cTime() # Creation time
 		self.currentIndex = -1 # There will be an step right away, counter act it
@@ -32,11 +33,21 @@ class Animation:
 	def setInterval(self, interval):
 		'Change animation interval'
 
+		# Re-set the frame interval
 		self.interval = interval/self.frameCount
+
+	def setFrame(self, index):
+		'Sets the current frame index'
+
+		# Ensure changing it wont cause an error
+		if index < self.frameCount:
+			self.currentIndex = index
+			self.frame = self.frames[self.currentIndex]
 
 	def reset(self):
 		'Reset animation to start'
 
+		# Re-set the current index and re-set the current frame
 		self.currentIndex = 0
 		self.frame = self.frames[self.currentIndex]
 
@@ -45,14 +56,19 @@ class Animation:
 
 		self.currentIndex += 1
 		if self.currentIndex >= self.frameCount:
-			self.currentIndex = 0
-			self.looped = True
+			# The animation has surpassed the last frame, restart it
+			if self.shouldLoop:
+				self.currentIndex = 0
+				self.looped = True
+			else:
+				self.currentIndex -= 1
 
 		self.frame = self.frames[self.currentIndex]
 
 	def render(self, time):
 		'Return the current frame'
 		
+		# Decide wether or not we should advance a frame
 		if time-self.lastFrame >= self.interval:
 			self.step()
 			self.lastFrame = time
