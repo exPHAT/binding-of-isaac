@@ -186,7 +186,7 @@ def menu(screen, jController, sounds, nextSong, changeSong):
 				sounds["selectLeft"].play()
 				if char == 1:
 
-			#Controls all the menu animtions including the sliding
+			#Controls the rotation of the characters 
 					for x in range(0,100,5):
 						screen.blit(mainbackground,(-960,0))
 						screen.blit(character[1],(430-x,230-x))
@@ -239,6 +239,8 @@ def menu(screen, jController, sounds, nextSong, changeSong):
 						screen.blit(menuoverlay2,(0,0))
 						display.flip()
 				char += 1
+
+			#Controls the adjustment of the seed
 			elif e.type == KEYDOWN and menu == "character" and e.key == 32:
 				seed = "".join(seed)
 				if seed == " "*8:
@@ -271,6 +273,7 @@ def menu(screen, jController, sounds, nextSong, changeSong):
 			elif char < 0:
 				char = 2
 
+			#Controls all the menu slides
 			if menu == "selection" and e.type == KEYDOWN and e.key == 27:     
 				menu = "file"
 				sounds["pageTurn"].stop()
@@ -436,7 +439,8 @@ def menu(screen, jController, sounds, nextSong, changeSong):
 			
 		elif menu == "file":
 			screen.blit(mainbackground,(0,-540)) 
-			#controls the raise of the file menus
+			
+			#controls the raise of the file menus and their deletion selection
 			if filepoint == 0:
 				total1 -= 5
 				screen.blit(file[0],(-20,total1))
@@ -490,6 +494,7 @@ def menu(screen, jController, sounds, nextSong, changeSong):
 			slide = screen.copy()
 			screen.blit(menuoverlay2,(0,0))
 
+		#Adjusts the display of the characters and their respective statistics
 		elif menu == "character":
 			screen.blit(mainbackground,(-960,0))
 			if char == 1:
@@ -515,6 +520,7 @@ def menu(screen, jController, sounds, nextSong, changeSong):
 			slide = screen.copy()
 			screen.blit(menuoverlay2,(0,0))
 
+		#Renders the text on the seed menu
 		elif menu == "seed":
 			screen.blit(mainbackground,(-1920,0))
 			screen.blit(write(seed[0:4],digitstwo),((370,50)))
@@ -522,6 +528,7 @@ def menu(screen, jController, sounds, nextSong, changeSong):
 			slide = screen.copy()
 			screen.blit(menuoverlay2,(0,0))
 
+		#Renders the correct text on the options
 		elif menu == "options":
 			screen.blit(mainbackground,(-1920,-540))
 			for i in range(len(moves)):
