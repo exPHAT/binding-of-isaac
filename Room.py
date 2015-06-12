@@ -132,7 +132,7 @@ class Room:
 				if typ in [1500, -1, -1, 1496, -1]:
 					self.poops.append(Poop([1500, -1, -1, 1496, -1].index(typ), (x,y), self.textures["poops"], self.sounds["pop"]))
 				elif typ == 1000:
-					self.rocks.append(Rock(0, (x,y), False, self.sounds["rockBreak"], self.textures["rocks"]))
+					self.rocks.append(Rock(randint(0,2), (x,y), False, self.sounds["rockBreak"], self.textures["rocks"]))
 				elif typ == 33:
 					self.fires.append(Fire(0, (x,y), [self.sounds["fireBurn"], self.sounds["steam"]], self.textures["fires"]))
 				elif typ == 5 and var == 10:
