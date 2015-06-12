@@ -1,3 +1,10 @@
+# Coin.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# This is the class for the coin that you can pickup in a room
+# 
+
 from pygame import *
 from const import *
 from Animation import *

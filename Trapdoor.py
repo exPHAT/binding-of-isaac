@@ -1,3 +1,10 @@
+# Trapdoor.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# The trapdoor will spawn when there are no enemies in the boss room
+# 
+
 from pygame import *
 from func import *
 from const import *

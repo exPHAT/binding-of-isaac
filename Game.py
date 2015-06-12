@@ -1,3 +1,11 @@
+# main.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# This is the main game class (not including menu)
+# It is responsible for rendering the floor and the character.
+# 
+
 from pygame import *
 from func import *
 from Character import *
@@ -16,10 +24,11 @@ class Game:
 	floorIndex = 0
 	currentRoom = (0,0)
 	animatingRooms = []
-	def __init__(self, characterType, seed):
+	def __init__(self, characterType, controls, seed):
 		self.surface = surface
 		self.characterType = characterType
 		self.seed = seed
+		self.controls = controls
 
 		self.banners = []
 
@@ -81,8 +90,8 @@ class Game:
 		animatingRooms = self.animatingRooms
 		currentRoom = self.currentRoom
 
-		self.isaac = isaac = Character(self.characterType, (WIDTH//2, (HEIGHT//4)*3), [[115, 100, 119, 97], [274, 275, 273, 276]], textures, sounds, fonts)
-
+		cn = self.controls
+		self.isaac = isaac = Character(self.characterType, (WIDTH//2, (HEIGHT//4)*3), [[cn[3], cn[1], cn[2], cn[0]], [cn[7], cn[5], cn[6], cn[4]]], textures, sounds, fonts)
 		if self.characterType == 0:
 			isaac.pill = Pill((0,0), textures["pills"])
 		elif self.characterType == 2:
@@ -125,16 +134,12 @@ class Game:
 
 				elif e.type == KEYDOWN:
 					isaac.moving(e.key, True, False)
-					if e.unicode == "p":
-						isaac.hurt(1, currTime)
-					elif e.unicode == "e":
+	
+					if e.key == self.controls[-1]:
 						if isaac.pickups[1].use(1):
 							self.floor[self.currentRoom].other.append(Bomb(self.floor[self.currentRoom], 0, ((isaac.x-GRIDX)/GRATIO, (isaac.y-GRIDY)/GRATIO), [sounds["explosion"]], textures["bombs"], explode=True))
-					elif e.unicode == "t":
-						isaac.pickups[1].add(3)
-					elif e.unicode == "h":
-						isaac.hurt(1, 0, 0, currTime)
-					elif e.unicode == "q":
+
+					elif e.key == self.controls[-2]:
 						isaac.usePill()
 
 				elif e.type == KEYUP:

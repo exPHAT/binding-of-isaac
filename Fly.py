@@ -1,3 +1,10 @@
+# main.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# This class is for the simple fly that just heads towards isaac.
+# 
+
 from pygame import *
 from const import *
 from Enemy import *

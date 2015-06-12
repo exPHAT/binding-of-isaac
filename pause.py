@@ -1,3 +1,12 @@
+# pause.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# The pause menu takes over the game and displays the
+# players current stats and seed.
+# 
+
+
 from pygame import *
 from math import *
 from const import *

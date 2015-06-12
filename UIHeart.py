@@ -1,3 +1,11 @@
+# UIHeart.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# When you take a Heart, it will create a UI heart.
+# It will show isaacs current health
+# 
+
 from pygame import *
 
 class UIHeart:

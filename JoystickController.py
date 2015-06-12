@@ -1,3 +1,11 @@
+# JoystickController.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# Takes input from the joystick and simulates key presses for
+# the corrisponding control 
+# 
+
 from pygame import *
 
 class JoystickController:

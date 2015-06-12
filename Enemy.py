@@ -1,3 +1,11 @@
+# Enenmy.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# This is parent enemy class, it contains the default moves
+# for all enemies in the game.
+# 
+
 from pygame import *
 from const import *
 from math import *

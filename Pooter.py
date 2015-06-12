@@ -1,3 +1,10 @@
+# Pooter.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# The pooter will follow the user similarly to a fly
+# 
+
 from pygame import *
 from const import *
 from Enemy import *

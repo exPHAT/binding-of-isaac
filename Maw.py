@@ -1,3 +1,10 @@
+# Maw.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# Maw follows the user just like a fly. Just with a diffrent texture
+# 
+
 from pygame import *
 from const import *
 from func import *

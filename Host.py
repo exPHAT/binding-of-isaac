@@ -1,3 +1,11 @@
+# Host.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# The host pops up at a random time and shoots a tear in the
+# characters directions
+# 
+
 from pygame import *
 from const import *
 from Enemy import *

@@ -1,3 +1,11 @@
+# Animation.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# This is the class for all animations in the game, based on time
+# it will advance the frame when it is the correct time
+# 
+
 from pygame import *
 from time import time as cTime
 

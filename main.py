@@ -4,12 +4,6 @@
 #
 # The main file for our final project. This is a replica of
 # the popular game The Binding of Isaac: Rebirth.
-#
-# TODO:
-# Enemy knockback
-# Boss
-# Items
-# Special controls - After menu
 # 
 
 from const import *
@@ -25,8 +19,10 @@ import os
 init() # Initalize pygame
 joystick.init() # Allow joystick support
 
+# Joystick controller
 jController = None
 
+# If there is a joystick, initialize with JoystickController
 jCount = joystick.get_count()
 if jCount > 0:
 	joysticks = [joystick.Joystick(i) for i in range(jCount)]
@@ -34,23 +30,28 @@ if jCount > 0:
 	jController = JoystickController(joysticks[0], 0.5)
 
 else:
-	print("Joystick not detected.")
-	joystick.quit() # Deinit joystick
+	joystick.quit() # Deinit joystick module
 
+# Create display
 screen = display.set_mode((WIDTH, HEIGHT))
 
+# Current song setup
 nextSong = ""
 changeSong = -1
 
 def playMusic(name, intro=""):
+	"Plays music with possible intro"
+
 	global nextSong, changeSong
 
 	if os.name == "posix": # Mac (music is broken)
 		return
 
+	# Reset variables
 	nextSong = ""
 	changeSong = -1
 
+	# If there is an intro, load and play it, set next songs
 	if len(intro) > 0:
 		intro = os.path.join('res', 'music', intro)
 		mixer.music.load(intro)
@@ -60,10 +61,13 @@ def playMusic(name, intro=""):
 		changeSong = mixer.Sound(intro).get_length() - 0.05
 
 	else:
+		# Just play the song normally
 		mixer.music.load(os.path.join('res', 'music', name))
 		mixer.music.play(-1)
 
 def showSymbol(screen, length, index, textures):
+	"Show loading screen symbol"
+
 	start = cTime()
 	texture = textures["loading"][index]
 	w = texture.get_width()
@@ -74,14 +78,17 @@ def showSymbol(screen, length, index, textures):
 			if e.type == QUIT or e.type == KEYDOWN and e.key == 27:
 				quit()
 
+		# Draw the centered texture
 		screen.fill((0,0,0))
 		screen.blit(texture, (WIDTH//2-w//2,HEIGHT//2-h//2))
 
 		display.flip()
 
+		# Only run for a certian ammount of time
 		if cTime() - start >= length:
 			running = False
 
+# Setup display
 display.set_caption("The Binding of Isaac: Rebirth")
 display.set_icon(image.load(os.path.join('res','textures', 'icon.png')))
 
@@ -179,24 +186,34 @@ fonts = {
 	"ticks": loadCFont("ticks.png", 4, 17 , 8),
 }
 
+# Begin main loop
 running = True
 while running:
+	# Start by playing the title screen music
 	playMusic("titleScreenLoop.ogg", intro="titleScreenIntro.ogg")
-	characterType, floorSeed = menu(screen, jController, sounds,nextSong, changeSong)
+
+	# Begin menu
+	characterType, controls, floorSeed = menu(screen, jController, sounds,nextSong, changeSong)
 
 	# Floor setup
 	seed(floorSeed)
 
+	# Define current time
 	currTime = 0
 
+	# Define clock (mainly for FPS)
 	clock = time.Clock()
 
+	# Play the choir noise when the user chooses a level
+	# and show the random symboly 
 	playMusic("titleScreenJingle.ogg")
 	showSymbol(screen, 4, randint(0, 55), textures)
 
+	# Play the normal game music
 	playMusic("basementLoop.ogg", intro="basementIntro.ogg")
 
-	game = Game(characterType, floorSeed)
+	# Start game
+	game = Game(characterType, controls, floorSeed)
 	game.run(screen, sounds, textures, fonts, joystick=jController)
 
 quit()

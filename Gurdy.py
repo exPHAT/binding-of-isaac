@@ -1,3 +1,10 @@
+# Gurdy.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# This is the first boss, Gurdy. He just sits there and takes your bullets
+# 
+
 from pygame import *
 from const import *
 from func import *

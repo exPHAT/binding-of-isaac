@@ -1,3 +1,11 @@
+# Fire.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# This is the class for the fires in each room.
+# They can have a diffrent base hurt isaac.
+# 
+
 from pygame import *
 from random import randint
 from const import *

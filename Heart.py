@@ -1,3 +1,11 @@
+# Heart.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# The heart can be rendered on the floor or on the HUD.
+# Taking damage will result in half of a heart loss.
+# 
+
 from pygame import *
 from const import *
 from Animation import *

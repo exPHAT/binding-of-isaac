@@ -1,3 +1,11 @@
+# Tear.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# The tear can be shot from an enemy or the main character.
+# It will hurt anything of the oppisite type (enemies and good guys)
+# 
+
 from pygame import *
 from const import *
 from random import randint

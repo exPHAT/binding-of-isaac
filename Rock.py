@@ -1,3 +1,11 @@
+# Rock.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# The rock can only be destroyed by dropping a bomb near it.
+# It will play a noise and will show some broken rock textures.
+# 
+
 from pygame import *
 from random import *
 from const import GRATIO, GRIDX, GRIDY

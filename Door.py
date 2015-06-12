@@ -1,3 +1,10 @@
+# Door.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# This is the class for all doors in the game.
+# 
+
 from pygame import *
 from const import GRATIO
 

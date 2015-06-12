@@ -1,3 +1,10 @@
+# Explosion.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# This class is spawned by a bomb and creates an explosion animations
+# 
+
 from pygame import *
 from const import *
 from Animation import *

@@ -1,6 +1,9 @@
 # WARNING!!!!!
 #
-# BLACK MAGIC MAKES THIS WORK. WE DID NOT WRITE THIS CODE
+# BLACK MAGIC MAKES THIS WORK. WE DID NOT WRITE THIS CODE.
+# THIS CODE WAS TAKEN FROM GITHUB.
+# 
+# Accessible at https://github.com/claudioharu/tronB/
 #
 
 
@@ -67,11 +70,7 @@ class AStarNode(object):
 
 class AStarGrid(AStar):
     def heuristic(self, node, start, end):
-        # NOTE: this is traditionally sqrt((end.x - node.x)**2 + (end.y - node.y)**2)
-        # However, if you are not interested in the *actual* cost, but only relative cost,
-        # then the math can be simplified.
         return abs(end.x - node.x) + abs(end.y - node.y)
-        #return sqrt((end.x - node.x)**2 + (end.y - node.y)**2)
  
 class AStarGridNode(AStarNode):
     def __init__(self, x, y):
@@ -97,10 +96,3 @@ def make_graph(mapinfo):
             if [x+i,y+j] in mapinfo['obstacle']: continue
             graph[nodes[x][y]].append(nodes[x+i][y+j])
     return graph, nodes
-
-# graph, nodes = make_graph({"width": 13, "height": 7, "obstacle": [[2,5],[3,5],[4,5],[5,5]]})
-# paths = AStarGrid(graph)
-# start, end = nodes[0][0], nodes[5][6]
-# path = paths.search(start, end)
-# for i in range(len(path)):
-#     print(path[i].x, path[i].y)

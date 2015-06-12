@@ -1,3 +1,11 @@
+# menu.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# The main menu for the game, it is reposnible for changing
+# key bindings, character selection, and seed.
+# 
+
 from pygame import *
 from math import *
 from random import *
@@ -6,11 +14,11 @@ from func import *
 def menu(screen, jController, sounds, nextSong, changeSong):
 	optionpoint = 0
 	edit = False
-	moves = ["Move Left","Move Right","Move Up","Move Down","Shoot Left","Shoot Right","Shoot Up","Shoot Down","Use Item","Use Bomb"]
+	moves = ["Move Left","Move Right","Move Up","Move Down","Shoot Left","Shoot Right","Shoot Up","Shoot Down","Take pill","Drop Bomb"]
 	seed = [" "," "," "," "," "," "," "," "]
-	controldisplay = ["A","D","W","S","Left Arrow","Right Arrow","Up Arrow","Down Arrow","Control","Shift"]
+	controldisplay = ["A","D","W","S","Left Arrow","Right Arrow","Up Arrow","Down Arrow","Q","E"]
 	defaultdisplay = controldisplay[:]
-	controls = [97,100,119,115,276,275,273,274,306,304]
+	controls = [97,100,119,115,276,275,273,274,113,101]
 	defaultcontrols = controls[:]
 	running = True
 	arrowpoint = 0
@@ -224,7 +232,7 @@ def menu(screen, jController, sounds, nextSong, changeSong):
 				if seed == " "*8:
 					seed = generateSeed()
 				createSave(filepoint, char, seed)
-				return char, seed
+				return char, controls, seed
 
 			if e.type == KEYDOWN and menu == "file" and e.key == 273:
 				space -= 1
@@ -370,7 +378,8 @@ def menu(screen, jController, sounds, nextSong, changeSong):
 			elif menu == "selection" and e.type == KEYDOWN and e.key == 32 and arrowpoint == 1:
 				# Continue
 				try:
-					return readSave(filepoint)
+					sv = readSave(filepoint)
+					return sv[0],controls,sv[1]
 				except:
 					sounds["error"].stop()
 					sounds["error"].play()

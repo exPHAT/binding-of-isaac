@@ -1,3 +1,10 @@
+# Item.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# The parent item class is ready to render items on the ground
+# 
+
 from pygame import *
 from const import *
 from Animation import *

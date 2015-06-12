@@ -1,3 +1,11 @@
+# Key.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# The class for the key that you can pickup.
+# The key can be used to unlock rooms such as item rooms and shops.
+# 
+
 from pygame import *
 from const import *
 from Animation import *

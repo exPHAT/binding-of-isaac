@@ -1,3 +1,10 @@
+# Pickup.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# This is the class for the HUD pickups (keys, bombs, coins)
+# 
+
 from pygame import *
 
 class Pickup:

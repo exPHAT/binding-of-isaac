@@ -1,3 +1,12 @@
+# Room.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# This room class supports animation in and out,
+# it will show the background and will be responsible for rendering
+# everything within it.
+# 
+
 from pygame import *
 from const import *
 from random import *

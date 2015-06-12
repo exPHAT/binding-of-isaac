@@ -1,3 +1,11 @@
+# Pill.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# The pill has a 50/50 chance of being positive or negative.
+# It will display a banner when taken
+# 
+
 from pygame import *
 from random import *
 from const import *

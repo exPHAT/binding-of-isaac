@@ -1,3 +1,10 @@
+# func.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# This file contains a many functions that are used throught the game
+# 
+
 import xml.etree.ElementTree as xml
 import os
 from Room import *
@@ -220,11 +227,11 @@ spot[4] = loadTexture("spot5.png", dir="bossIntro")
 spot[5] = loadTexture("spot6.png", dir="bossIntro")
 bossspot = loadTexture("bossspot.png", dir="bossIntro")
 face[1] = loadTexture("issacportrait.png", dir="bossIntro")
-face[0] = loadTexture("eveportrait.png", dir="bossIntro")
-face[2] = loadTexture("lazarusportrait.png", dir="bossIntro")
+face[2] = loadTexture("eveportrait.png", dir="bossIntro")
+face[0] = loadTexture("lazarusportrait.png", dir="bossIntro")
 title[1] = loadTexture("titleissac.png", dir="bossIntro")
-title[0] = loadTexture("titleeve.png", dir="bossIntro")
-title[2] = loadTexture("titlelazarus.png", dir="bossIntro")
+title[2] = loadTexture("titleeve.png", dir="bossIntro")
+title[0] = loadTexture("titlelazarus.png", dir="bossIntro")
 bosstitle[0] = loadTexture("titlegurdy.png", dir="bossIntro")
 bosstitle[1] =  loadTexture("titledukeofflies.png", dir="bossIntro")
 bossface[0] = loadTexture("gurdy.png", dir="bossIntro")

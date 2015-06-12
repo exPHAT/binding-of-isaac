@@ -1,3 +1,11 @@
+# Poop.py
+# Aaron Taylor
+# Moose Abumeeiz
+#
+# You can pop poops by shooting them with your tears.
+# They will play a pop noise once they are poped.
+# 
+
 from pygame import *
 from const import GRATIO, GRIDX, GRIDY
 
