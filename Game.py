@@ -193,7 +193,8 @@ class Game:
 
 						# Animate isaac with the room
 						isaac.x += 650*(-move[0])
-						isaac.y += 338*(move[1])
+						isaac.y += 348*(move[1])
+
 
 						# Remove tears from an animating room
 						isaac.clearTears()

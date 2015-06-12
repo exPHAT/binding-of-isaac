@@ -20,11 +20,11 @@ class Banner:
 		self.start = cTime() # When the banner was created
 		
 		# Create a surface for the text
-		self.drawText = write(text, self.snap, alph="abcdefghijklmnopqrstuvwxyz ")
+		self.drawText = write(text, self.snap, alph="abcdefghijklmnopqrstuvwxyz ", dark=0)
 	def draw(self, surface, text):
 		# Draw it on the surface
 		surface.blit(self.streak,(80,100))
-		surface.blit(self.drawText,(380,150))
+		surface.blit(self.drawText,(390,150))
 
 	def render(self, surface):
 		self.slide = surface.copy()

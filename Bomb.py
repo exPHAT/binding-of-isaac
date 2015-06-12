@@ -52,7 +52,7 @@ class Bomb(Item):
 				try:
 					ob.destroy()
 				except:
-					ob.hurt(2)
+					ob.hurt(8)
 
 	def pickup(self):
 		if not self.shouldExplode:

@@ -196,7 +196,7 @@ def deleteSave(index):
 	except:
 		pass
 
-def write(text, font, alph=alph):
+def write(text, font, alph=alph, dark=.8):
 	# Create surface with special font
 
 	width = font[0].get_width()
@@ -205,7 +205,7 @@ def write(text, font, alph=alph):
 	writing.fill((0,0,0,0))
 	for i in range(len(text)):
 		writing.blit(font[alph.index(text[i].lower())], (i*width, 0))
-	return darken(writing, 0.80)
+	return darken(writing, dark)
 
 
 

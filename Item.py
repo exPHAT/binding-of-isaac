@@ -45,5 +45,5 @@ class Item:
 		if not self.pickedUp:
 			surface.blit(self.texture, (GRIDX+GRATIO*self.x+ox-self.tWidth//4,GRIDY+GRATIO*self.y+oy-self.tHeight//4))
 			if self.price != 0:
-				surface.blit(func.write(str(self.price), self.digits), (GRIDX+GRATIO*self.x+ox-5,GRIDY+GRATIO*self.y+oy+35))
+				surface.blit(func.write(str(self.price), self.digits, dark=0), (GRIDX+GRATIO*self.x+ox-5,GRIDY+GRATIO*self.y+oy+35))
 		return not self.pickedUp

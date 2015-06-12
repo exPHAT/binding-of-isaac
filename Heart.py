@@ -49,5 +49,5 @@ class Heart(Item):
 			# draw.rect(surface, (255,0,0), self.bounds)
 			surface.blit(self.texture, (GRIDX+GRATIO*self.x-self.width//4+ox,GRIDY+GRATIO*self.y-self.height//4+oy))
 			if self.price != 0:
-				surface.blit(func.write(str(self.price), self.digits), (GRIDX+GRATIO*self.x+ox-5,GRIDY+GRATIO*self.y+oy+35))
+				surface.blit(func.write(str(self.price), self.digits, dark=0), (GRIDX+GRATIO*self.x+ox-5,GRIDY+GRATIO*self.y+oy+35))
 		return not self.pickedUp

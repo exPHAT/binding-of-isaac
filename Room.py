@@ -143,16 +143,14 @@ class Room:
 					self.other.append(Key(0, (x, y), [self.sounds["keyDrop"], self.sounds["keyPickup"]], self.textures["keys"]))
 				elif typ == 5 and var == 40:
 					self.other.append(Bomb(self, 0, (x, y), [self.sounds["explosion"]], self.textures["bombs"], explode=False))
-				elif typ == 5 and var == 50:
-					self.other.append(Pill((x, y), self.textures["pills"]))
 				elif typ == 13:
-					self.enemies.append(Boil((x, y), self.sounds, self.textures))
+					self.enemies.append(Fly((x,y), [self.sounds["deathBurst"]], self.textures["enemies"]["fly"]))
 				elif typ == 14:
 					self.enemies.append(Pooter((x, y), [self.sounds["deathBurst"]], self.textures["enemies"]["pooter"]))
-				elif typ == 15:
-					self.other.append(PHD((x,y), self.sounds, self.textures["phd"]))
-				# elif typ == 15:
-					# self.enemies.append(Maw((x, y), [self.sounds["deathBurst"]], self.textures["enemies"]["maw"]))
+				elif typ == 26:
+					self.enemies.append(Maw((x, y), [self.sounds["deathBurst"]], self.textures["enemies"]["maw"]))
+				elif typ == 30:
+					self.enemies.append(Boil((x, y), self.sounds, self.textures))
 
 	def addDoor(self, xy, variant, isOpen):
 		x, y = xy
@@ -240,11 +238,11 @@ class Room:
 
 				# Random spawn
 				if typ == 0:
-					self.other.append(Coin(0, (6,3), [self.sounds["coinDrop"], self.sounds["coinPickup"]], self.textures["coins"]))
+					self.other.append(Coin(0, (6,2), [self.sounds["coinDrop"], self.sounds["coinPickup"]], self.textures["coins"]))
 				elif typ == 1:
-					self.other.append(Bomb(self, 1, (6,3), [self.sounds["explosion"]], self.textures["bombs"], explode=False))
+					self.other.append(Bomb(self, 1, (6,2), [self.sounds["explosion"]], self.textures["bombs"], explode=False))
 				elif typ == 2:
-					self.other.append(Key(0, (6, 3), [self.sounds["keyDrop"], self.sounds["keyPickup"]], self.textures["keys"]))
+					self.other.append(Key(0, (6, 2), [self.sounds["keyDrop"], self.sounds["keyPickup"]], self.textures["keys"]))
 
 			# Create trapdoor in empty boss room
 			if self.variant == 2 and self.floor < 6 and not Trapdoor in list(map(type, self.other)):
