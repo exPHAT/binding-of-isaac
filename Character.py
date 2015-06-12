@@ -13,6 +13,7 @@ from Bomb import *
 from Item import *
 from Pill import *
 from Trapdoor import *
+from Banner import *
 
 class Character:
 	"""The main class for Isaac"""
@@ -179,6 +180,11 @@ class Character:
 		if self.pill != None:
 			self.pill.use(self) # Pass in the character to check for PHD
 			st = self.pill.stats # The pills statss
+			types = ["Speed", "Tears", "Damage", "Range", "Shot Speed", "Luck"]
+			if sum(st) == -1:
+				self.game.banners.append(Banner(types[st.index(-1)] + " Down", self.game.textures))
+			else:
+				self.game.banners.append(Banner(types[st.index(1)] + " Up", self.game.textures))
 			self.speed += st[0]
 			self.shotRate += st[1]
 			self.damage += st[2]
