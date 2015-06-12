@@ -461,24 +461,29 @@ class Character:
 		for i in range(len(doors)):
 			door = doors[i]
 
+			# Dont allow walking through closed doors
 			if not door.isOpen:
 				continue
 
+			# Door collision
 			dcx = door.rect.collidepoint(self.x+dx, self.y)
 			dcy = door.rect.collidepoint(self.x, self.y+dy)
 
+			# If youre in a locked room with 1 exit, unlock the doors
 			if len(doors) == 1 and door.locked:
 				door.locked = False
 
-
+			# Unlocking doors
 			if door.locked and self.pickups[2].score > 0 and (dcx or dcy):
 				door.locked = False
 				self.pickups[2].score -= 1
 				continue
 
+			# Stop you from walking through locked doors
 			if door.locked:
 				continue
 
+			# Door collission x and y
 			if dcx:
 				self.x += dx
 
@@ -487,6 +492,7 @@ class Character:
 
 			side = door.side
 
+			# Try to walk throught the door
 			if not dcx or not dcy:
 				if sum(map(int, [
 						mx[side] < 0 and door.rect.x-(self.x+dx) > 0,
@@ -498,25 +504,27 @@ class Character:
 					move[1] = my[side]
 					break
 
-
-
+		# Move character 
 		self.x += dx if	inBoundsX and (not rockColX or self.isFlying) else 0
 		self.y += dy if inBoundsY and (not rockColY or self.isFlying) else 0
 
+		# Update characters body rect
 		self.bodyRect = Rect(self.x-16, self.y, 32, 16) # Move body rect
 
+		# Update velocity
 		self.updateVel()
 		
+		# Draw characters special frame
 		if self.specialFrame == 0:
 			surface.blit(self.body, (self.x-32, self.y-32))
 			surface.blit(self.head, (self.x-32, self.y-32-20))
 		else:
 			surface.blit(self.specialFrames[self.specialFrame-1], (self.x-64, self.y-72))
 
+		# Render tears
 		for tear in self.tears[:]:
 			if not tear.render(surface, time, bounds, obsticals):
 				self.tears.remove(tear)
-
 
 		for i in range(len(self.hearts)):
 			self.hearts[i].render(surface, i)

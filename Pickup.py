@@ -28,8 +28,11 @@ class Pickup:
 		self.texture = textures.subsurface(Rect(xPos*2, yPos*2, 16*2, 16*2))
 
 	def updateDigits(self):
+		# Update textures for digits
+
 		string = str(self.score)
 		if len(string) == 1:
+			# Prepend with a 0
 			string = "0"+string
 		self.digit1 = self.font[int(string[0])]
 		self.digit2 = self.font[int(string[1])]
@@ -53,6 +56,7 @@ class Pickup:
 		return True
 
 	def render(self, surface):
+		# Blit icon, digit1, and digit 2
 		surface.blit(self.texture, (40, 88 + 24*self.variant))
 		surface.blit(self.digit1, (68, 94 + 24*self.variant))
 		surface.blit(self.digit2, (80, 94 + 24*self.variant))

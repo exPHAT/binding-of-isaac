@@ -35,24 +35,30 @@ class Host(Enemy):
 		if not self.dead:
 			self.checkHurt(character, time)
 
-		if self.canHurt:
+		if self.canHurt: # aka is up
 			self.texture = self.frames[1]
+
+			# Handle opening, shooting and closing again
 			if time-self.sinceFull >= .5 and not self.shot:
 				self.shot = True
 				dx, dy = character.x-(GRIDX+GRATIO*self.x), character.y-(GRIDY+GRATIO*self.y)
 				dist = sqrt(dx**2+dy**2)
 				self.tears.append(Tear((dx/dist, dy/dist), (GRIDX+GRATIO*self.x+16, GRIDY+GRATIO*self.y), (0, 0), 1, 1, 1, False, self.tearTextures, self.tearSounds))
 			elif time-self.sinceFull >= 1:
+				# Put down
+				
 				self.canHurt = False
 				self.shot = False
 				self.sinceDown = time
 
 		else:
+			# Set to down texture
 			self.texture = self.frames[0]
 			self.canHurt = randint(0,100) == 0 and time-self.sinceDown >= 1.5
 			if self.canHurt:
 				self.sinceFull = time
 
+		# Render tears
 		for tear in self.tears[:]:
 			if not tear.render(surface, time, bounds, obsticals):
 				self.tears.remove(tear)

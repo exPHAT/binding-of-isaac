@@ -36,6 +36,7 @@ class Heart(Item):
 		self.collideable = False
 		self.pickedUp = False
 
+		# Load the font for the shop price
 		self.digits = func.loadCFont("main.png", 20, 16, 36, size=1.8)
 
 	def pickup(self):
@@ -43,6 +44,7 @@ class Heart(Item):
 		self.sound.play()
 
 	def render(self, surface, time, objects, ox=0, oy=0):
+		# Render the heart on the ground
 		if not self.pickedUp:
 			# draw.rect(surface, (255,0,0), self.bounds)
 			surface.blit(self.texture, (GRIDX+GRATIO*self.x-self.width//4+ox,GRIDY+GRATIO*self.y-self.height//4+oy))

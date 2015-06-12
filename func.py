@@ -16,27 +16,25 @@ from Pill import *
 alph = "abcdefghijklmnopqrstuvwxyz0123456789 "
 
 def darken(image, ammount):
+	"Darken the image but preseve transparency"
+
 	nImage = image.copy()
 
 	ammount = int(ammount*255)
 
+	# Blit new darker surface
 	dark = Surface(nImage.get_size())
 	dark.set_alpha(ammount, RLEACCEL)
 	nImage.blit(dark, (0,0))
 
+	# Use pixel array to remove previously transparent pixels
 	pa = PixelArray(nImage)
 	pa.replace((0,0,0,ammount), (0,0,0,0))
 	return pa.make_surface()
 
-def parseImage(image, startX, startY, width, height, xCount, yCount, total):
-	textures = []
-
-	[textures.subsurface(i*128 - ((i//4)*128*4), 128 * (i//4 + 1), 128, 128) for i in range(12)]
-
-	for i in range(total):
-		image.subsurface(i*width - ((i//xCount)*width*xCount), i*height , width, height)
-
 def generateSeed():
+	# Create random level seed
+
 	SEED_LENGTH = 8
 	characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	charLen = len(characters)
@@ -48,9 +46,12 @@ def generateSeed():
 	return finalSeed
 
 def findRooms(floor, possibleCoords, rooms):
+	# Find rooms on the floor
+
 	rs = []
 	moves = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
+	# Find rooms that can spawn 
 	for room in possibleCoords:
 		x, y = room
 		count = 0
@@ -78,7 +79,7 @@ def loadFloor(name, index, size, sounds, textures):
 	floor = {}
 	floor[(0,0)] = Room(index, 0, (0,0), d[0], textures, sounds)
 
-
+	# Create the floor
 	moves = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 	unusedRooms = [i for i in range(2, len(d))]
 	possibleCoords = moves[:]
@@ -95,20 +96,18 @@ def loadFloor(name, index, size, sounds, textures):
 		unusedRoom = choice(unusedRooms)
 		unusedRooms.remove(unusedRoom)
 		rooms.append(chosen)
+
+		# Create a room at the selected spot
 		floor[chosen] = Room(index, 0, chosen, d[unusedRoom], textures, sounds)
 
+	# Spawn shop
 	someRooms = findRooms(floor, possibleCoords, rooms)
-
 	shuffle(someRooms)
-
 	for room in someRooms:
 		if room[1] == 1:
 			shop = tuple(room[0])
 			break
-			
 	floor[shop] = Room(index, 5, shop, d[2], textures, sounds)
-	# Spirit Heart, Pill, PHD
-
 	things = [
 		Heart(1, (5,3), [sounds["heartIntake"], sounds["holy"]], textures["pickupHearts"]),
 		Pill((6, 3), textures["pills"]),
@@ -118,30 +117,26 @@ def loadFloor(name, index, size, sounds, textures):
 		things[i].price = i*2+3
 		floor[shop].other.append(things[i])
 
+	# Spawn item room
 	someRooms = findRooms(floor, possibleCoords, rooms)
-
 	shuffle(someRooms)
-
 	for room in someRooms:
 		if room[1] == 1:
 			itemRoom = tuple(room[0])
 			break
-
 	floor[itemRoom] = Room(index, 1, itemRoom, d[1], textures, sounds)
 	if randint(0,10) == 0:
 		floor[itemRoom].other.append(PHD((6,3), sounds, textures["phd"]))
 	else:
 		floor[itemRoom].other.append(Pill((6,3), textures["pills"]))
 
+	# Spawn boss room
 	someRooms = findRooms(floor, possibleCoords, rooms)
-
 	shuffle(someRooms)
-
 	for room in someRooms:
 		if room[1] == 1:
 			bossRoom = tuple(room[0])
 			break
-
 	floor[bossRoom] = Room(index, 2, bossRoom, d[0], textures, sounds)
 	floor[bossRoom].enemies.append(Gurdy(textures["bosses"]["gurdy"], sounds))
 
@@ -174,6 +169,8 @@ def loadSound(name):
 	return s
 
 def loadCFont(name, width, height, total, size=2):
+	# Load custom font
+
 	f = image.load(os.path.join('res', 'fonts', name))
 	digits = [transform.scale(f.subsurface(width*i, 0, width, height), list(map(int,(width*size, height*size)))) for i in range(total)]
 	space = Surface((width, height)).convert_alpha()
@@ -200,6 +197,8 @@ def deleteSave(index):
 		pass
 
 def write(text, font, alph=alph):
+	# Create surface with special font
+
 	width = font[0].get_width()
 	height = font[0].get_height()
 	writing = Surface((width*len(text), height)).convert_alpha()
@@ -239,6 +238,7 @@ bossface[1] = loadTexture("dukeofflies.png", dir="bossIntro")
 vs = loadTexture("vs.png", dir="bossIntro")
 
 def bossIntro(screen, char,boss,floor):
+	# Slide in character + boss
 	for i in range(0,380,14):
 		screen.blit(frame,(0,0))
 		screen.blit(spot[floor],(-340+i,390))
@@ -247,7 +247,7 @@ def bossIntro(screen, char,boss,floor):
 		screen.blit(face[char],(-275+i,300))
 		display.flip()
 		
-
+	# Slide in text
 	copy = screen.copy()
 	for i in range(0,500,16):
 		screen.blit(copy,(0,0))
@@ -255,6 +255,8 @@ def bossIntro(screen, char,boss,floor):
 		screen.blit(vs,(-390+i,90))
 		screen.blit(bosstitle[boss],(-400+i,170))
 		display.flip()
+
+	# Slower slide in
 	for i in range(0,180,4):
 		screen.blit(copy,(0,0))
 		screen.blit(title[char],(100+i,10))
@@ -262,17 +264,21 @@ def bossIntro(screen, char,boss,floor):
 		screen.blit(bosstitle[boss],(100+i,170))
 		display.flip()
 
+	# Stall for a bit
 	for i in range(0, 20):
 		display.flip()
 
 	copy = screen.copy()
 	screen.blit(copy,(0,0))
 
+# Textures for boss bar
 emptybar = loadTexture("emptybar.png", dir="healthBar")
 skull = loadTexture("skull.png", dir="healthBar")
 fullbar = loadTexture("fullbar.png", dir="healthBar")
 
 def bossbar(screen, health):
+	# Draw boss bar with correc health
+	
     if health == 1:
         screen.blit(fullbar,(350,-30))
     elif health <= 0:

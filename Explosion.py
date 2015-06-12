@@ -19,14 +19,13 @@ class Explosion:
 		self.sound = sound
 		self.textures = textures[variant]
 
-		# 192
-
 		self.frames = [self.textures.subsurface(192*i - (i//4)*768,192*(i//4), 192, 192) for i in range(12)]
 
 		self.anim = Animation(self.frames, .45)
 		sound.play() # Play explosion sound
 
 	def render(self, surface, time, ox=0, oy=0):
+		# Get frame and blit to screen
 		frame = self.anim.render(time)
 		if self.anim.looped:
 			return False

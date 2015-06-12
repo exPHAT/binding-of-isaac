@@ -36,11 +36,14 @@ class Poop:
 
 		self.texture = self.textures[0]
 
+		# Texture with and height
 		self.tWidth = self.texture.get_width()
 		self.tHeight = self.texture.get_height()
 		self.destroyed = False
 
 	def destroy(self):
+		# Poops can be destroyed by tears
+
 		if not self.destroyed:
 			self.destroyed = True
 			self.texture = self.textures[-1]

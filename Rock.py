@@ -41,6 +41,7 @@ class Rock:
 				# TODO: TAKE CARE OF DROPS
 				pass
 
+			# Destroy and change texture of the rock + sound
 			self.destroyed = True
 			self.texture = self.brokenTexture
 			self.sound.stop()

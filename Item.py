@@ -30,6 +30,7 @@ class Item:
 
 		self.texture = self.textures.subsurface(0, 0, self.tWidth, self.tHeight)
 
+		# Texture for shop price
 		self.digits = func.loadCFont("main.png", 20, 16, 36, size=1.8)
 
 	def pickup(self):

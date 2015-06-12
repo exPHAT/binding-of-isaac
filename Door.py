@@ -27,12 +27,15 @@ class Door:
 	def __init__(self, floor, side, variant, isOpen, texture, sounds):
 		self.side = side
 		self.variant = variant
+
+		# Locked door
 		if variant == 5:
 			self.texture = texture[0][0]
 		else:
 			self.texture = texture[variant]
 		self.locked = False
 
+		# Bash textures
 		if self.variant == 0:
 			if floor < 3:
 				self.texture = self.texture[0]
@@ -42,7 +45,8 @@ class Door:
 				self.texture = self.texture[2]
 		elif (self.variant == 1 and floor == 1) or self.variant == 5:
 			self.locked = True
-			
+		
+		# Darken the door a little
 		self.texture = func.darken(self.texture, .25)
 		self.sounds = sounds
 
@@ -50,6 +54,7 @@ class Door:
 		self.x = -1
 		self.y = -1
 
+		# Ensure the door is the correct type
 		if variant != 3 and variant != 4:
 			# Rotate the door texture to be the correct orrientation
 			self.doorFrame  = transform.rotate(self.texture.subsurface(0, 0, 64*2, 48*2), -(180 - (90*self.side)))
@@ -59,20 +64,24 @@ class Door:
 			self.lockedDoor = transform.rotate(self.texture.subsurface(64*2, 96*2, 64*2, 48*2), -(180 - (90*self.side)))
 
 		else:
-
+			# Play special sound
 			sounds[["devilRoomAppear", "angelRoomAppear"][variant-3]].play()
 
+			# Setup texture for special doors
 			self.doorFrame = transform.rotate(self.texture, -(180 - (90*self.side)))
 			self.doorBack  = Surface((0,0))
 			self.lDoor     = Surface((0,0))
 			self.rDoor     = Surface((0,0))
 
+		# Change x and y based on side
 		self.x = [7, 14, 7, -1][self.side]
 		self.y = [8, 4, -1, 4][self.side]
 
+		# Account for offsets
 		self.xOff = [0, 6, 0, 48][self.side]
 		self.yOff = [-48, -52, -6, -52][self.side]
 
+		# Bash side rect
 		if side == 0:
 			self.rect = Rect(468,436,22,32)
 		elif side == 1:
@@ -102,6 +111,7 @@ class Door:
 		width = self.doorFrame.get_width()
 		height = self.doorFrame.get_height()
 
+		# Convert grid x and y to pixel x and y
 		xy = (((142 + (self.x*GRATIO)-(width//2)-GRATIO//2) + self.xOff) + ox, ((89 + (self.y*GRATIO)-(height//2)+GRATIO//2)+self.yOff) + oy)
 
 		surface.blit(self.doorBack, xy)

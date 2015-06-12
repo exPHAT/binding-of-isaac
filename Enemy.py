@@ -15,6 +15,7 @@ from random import randint
 class Enemy:
 	"""Enemy parent class"""
 
+	# Setup
 	isFlying = False
 	dead = False
 	path = []
@@ -34,10 +35,13 @@ class Enemy:
 				self.die()
 
 	def checkHurt(self, character, time):
+		# Check for any hurt
+
 		self.cx, self.cy = ix, iy = (character.x-GRIDX)/GRATIO, (character.y-GRIDY)/GRATIO
 		dx, dy = (self.cx-self.x), (self.cy-self.y)
 
 		if not self.dead:
+			# Check tear hurt
 			for t in character.tears:
 				tx = (t.x-GRIDX)/GRATIO
 				ty = (t.y-GRIDY)/GRATIO
@@ -47,11 +51,13 @@ class Enemy:
 					if self.canHurt:
 						self.hurt(t.damage)
 
+			# Check if character is too close
 			if abs(dx) < 0.8 and abs(dy) < 0.8:
 				fx, fy = (GRIDX+GRATIO*self.x, GRIDY+GRATIO*self.y)
 
 				character.hurt(1, fx, fy, time)
 
+		# Check if character should be hit
 		for tear in self.tears:
 			dist = sqrt((tear.x-character.x)**2+(tear.y-character.y)**2)
 			if dist/GRATIO <= character.hurtDistance and not tear.poped:
@@ -72,19 +78,25 @@ class Enemy:
 				self.path = self.path[1:]
 
 		if len(self.path) > 0:
+			# Head towards next point
 			dx, dy = self.path[0][0]-self.x, self.path[0][1]-self.y
 		else:
+			# Head towards character
 			dx, dy = self.cx-self.x, self.cy-self.y
 
-		something = sqrt(dx**2+dy**2)
+		# Move ratios
+		dist = sqrt(dx**2+dy**2)
 
-		rx = dx/something
-		ry = dy/something
+		rx = dx/dist
+		ry = dy/dist
 
+		# Move character
 		self.x += self.speed*rx
 		self.y += self.speed*ry
 
 	def pathFind(self, xy, nodes, paths):
+		# Do pathfinding
+		
 		self.cx, self.cy = x, y = list(map(round,xy))
 
 		if self.isFlying:

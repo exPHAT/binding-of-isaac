@@ -24,9 +24,8 @@ class JoystickController:
 		pass
 
 	def getAxis(self, index):
+		# Get stick 
 		pos = round(self.stick.get_axis(index), 1)
-
-		print(pos)
 
 		if abs(pos) < self.thresh:
 			return 0
@@ -45,6 +44,8 @@ class JoystickController:
 		if newAxis[0] != self.axis[0]:
 			# change in joystick 1 X
 			a = newAxis[0]
+
+			# EMULATE ALL THE EVENTS
 			if a == 0:
 				self.createKeyEvent(self.keys[0][3], False)
 				self.createKeyEvent(self.keys[0][1], False)
@@ -55,6 +56,8 @@ class JoystickController:
 		elif newAxis[1] != self.axis[1]:
 			# change in joystick 1 Y
 			a = newAxis[1]
+
+			# MOAR EVENTS
 			if a == 0:
 				self.createKeyEvent(self.keys[0][0], False)
 				self.createKeyEvent(self.keys[0][2], False)
@@ -66,6 +69,8 @@ class JoystickController:
 		elif newAxis[3] != self.axis[3]:
 			# change in joystick 1 X
 			a = newAxis[3]
+
+			# OMG EVENTS
 			if a == 0:
 				self.createKeyEvent(self.keys[1][0], False)
 				self.createKeyEvent(self.keys[1][2], False)
@@ -84,4 +89,4 @@ class JoystickController:
 			'unicode': '',
 		})
 
-		event.post(evnt) # Inject event
+		event.post(evnt) # Create event

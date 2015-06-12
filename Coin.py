@@ -26,6 +26,7 @@ class Coin(Item):
 		self.collideable = False
 		self.pickedUp = False
 
+		# Split up textures
 		self.frames = [self.textures.subsurface(i*128, 0, 128, 128) for i in range(6)]
 		self.frames = [self.frames[0].copy() for i in range(16)] + self.frames
 		self.anim = Animation(self.frames, 1)

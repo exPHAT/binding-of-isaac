@@ -42,6 +42,7 @@ class UIHeart:
 
 		xOffset = 0
 
+		# Position on screen
 		if self.health == 0:
 			xPos = 32*2
 			yPos = 0
@@ -59,11 +60,9 @@ class UIHeart:
 
 		if self.health-ammount < 0:
 			return ammount - self.health
-
 		self.health -= ammount
 
 		self.updateImage()
-
 
 		return self.health <= 0 and self.variant != 0 # Wether heart should be destroyed
 

@@ -1,4 +1,4 @@
-# main.py
+# Fly.py
 # Aaron Taylor
 # Moose Abumeeiz
 #
@@ -25,11 +25,13 @@ class Fly(Enemy):
 
 		self.sounds = sounds
 
+		# Frames and death frames
 		self.frames = [textures.subsurface(i*64, 0, 64, 64) for i in range(2)]
 		self.deathFrames = [textures.subsurface(i*128 - ((i//4)*128*4), 128 * (i//4 + 1), 128, 128) for i in range(12)]
 
 		self.anim = Animation(self.frames, 0.04)
 
+		# Speed ratio
 		self.speed = 1.5/GRATIO
 
 	def die(self):
@@ -49,8 +51,8 @@ class Fly(Enemy):
 				self.pathed = True
 			self.move()
 
+			# Check for damage
 			self.checkHurt(character, time)
-
 
 			frame = self.anim.render(time)
 		else:

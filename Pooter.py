@@ -39,19 +39,19 @@ class Pooter(Enemy):
 		speed = 1.5/GRATIO
 
 		ix, iy = (character.x-GRIDX)/GRATIO, (character.y-GRIDY)/GRATIO
-
-
 		dx, dy = (ix-self.x), (iy-self.y)
 
-		something = sqrt(dx**2+dy**2)
 
-		rx = dx/something
-		ry = dy/something
+		# X and Y ratios
+		dist = sqrt(dx**2+dy**2)
+		rx = dx/dist
+		ry = dy/dist
 
 		hurtDistance = 0.8
 
 		if not self.dead:
 
+			# Add to x and y
 			self.x += speed*rx
 			self.y += speed*ry
 
@@ -65,4 +65,4 @@ class Pooter(Enemy):
 				return False
 
 		surface.blit(frame, (GRIDX+GRATIO*self.x-self.anim.width//2, GRIDY+GRATIO*self.y-self.anim.height//2))
-		return True
+		return True # Should remain in enemies list

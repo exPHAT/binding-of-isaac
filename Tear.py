@@ -16,17 +16,21 @@ class Tear:
 
 	def __init__(self, xyv, xy, ixy, speed, damage, shotRange, friendly, textures, sounds):	
 		self.xVel, self.yVel = xyv # X, Y velocity
+		
+		# Stats
 		self.speed = int(speed*2)+4
 		self.damage = damage+3
 		self.friendly = friendly
 		self.range = (shotRange*20)+200
 		self.distance = 0
 
+		# sounds
 		self.sounds = sounds
 
 		self.x = xy[0]
 		self.y = xy[1]
 
+		# Inherited x and y velocity
 		self.iXVel = ixy[0]
 		self.iYVel = ixy[1]
 
@@ -51,6 +55,7 @@ class Tear:
 		# Play random shoot sound
 		sounds[randint(0,1)].play()
 
+		# Texture setup
 		self.texture = textures[0].subsurface(Rect((self.damage+offX)*64, offY*64, 64, 64))
 		self.width = self.texture.get_width()
 		self.height = self.texture.get_height()
@@ -69,6 +74,7 @@ class Tear:
 
 	def render(self, surface, time, bounds, obsticals):
 		if self.poped:
+			# Return popping tear
 			frame = self.popping.render(time)
 			if self.popping.looped:
 				return False
@@ -82,6 +88,7 @@ class Tear:
 			dx += self.xVel * self.speed
 			dy += self.yVel * self.speed
 
+			# Add inherited X and Y velocity
 			dx += self.iXVel
 			dy += self.iYVel
 
@@ -98,6 +105,7 @@ class Tear:
 						continue
 				except:
 					pass
+				# Collude with object
 				rcx = ob.bounds.collidepoint(self.x+self.speed, self.y)
 				rcy = ob.bounds.collidepoint(self.x, self.y+self.speed)
 				if rcx or rcy:
@@ -111,8 +119,10 @@ class Tear:
 					return self.pop(True)
 
 			if not inBoundsX or not inBoundsY:
+				# Ensure tear is within level bounds
 				return self.pop(True)
 
+			# Add to x and y
 			self.x += dx
 			self.y += dy
 

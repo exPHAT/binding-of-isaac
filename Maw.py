@@ -23,6 +23,7 @@ class Maw(Fly):
 		self.frames = [textures.subsurface(0, 0, 64, 64)]
 		self.deathFrames = [textures.subsurface(0,0,0,0) for i in range(1)]
 
+		# Create his still animation
 		self.anim = Animation(self.frames, 0.04)
 
 		self.speed = 1.5/GRATIO

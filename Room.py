@@ -59,20 +59,23 @@ class Room:
 
 		backdrop = Surface((221*2*2, 143*2*2))
 
-
+		# Form the texture to each of the 4 corners of the room
 		backdrop.blit(texture, (0,0))
 		backdrop.blit(transform.flip(texture, True, False), (221*2, 0))
 		backdrop.blit(transform.flip(texture, False, True), (0, 143*2))
 		backdrop.blit(transform.flip(texture, True, True), (221*2, 143*2))
 
+		# Show tutorial controls if its the first room
 		if floor == 0 and xy[0] == 0 and xy[1] == 0:
 			controls = textures["controls"]
 			backdrop.blit(controls, (113, 203))
 
+		# Add gorgeous lighting
 		backdrop.blit(textures["shading"], (0,0))
 		backdrop = func.darken(backdrop, .25)
 		backdrop.blit(textures["overlays"][randint(0,4)], (0,0))
 
+		# Setup x and y
 		self.x, self.y = xy
 		self.w, self.h = 0,0
 
@@ -107,6 +110,7 @@ class Room:
 		for o in self.rocks+self.fires+self.poops:
 			obsticals.append([o.x, o.y])
 
+		# Setup room for path finding
 		graph, self.nodes = make_graph({"width": 13, "height": 7, "obstacle": obsticals})
 		self.paths = AStarGrid(graph)
 		self.hadEnemies = len(self.enemies) > 0
@@ -124,6 +128,7 @@ class Room:
 				var = int(obj[0].get('variant'))
 				subtype = int(obj[0].get('subtype'))
 
+				# Spawn the correct item for the type
 				if typ in [1500, -1, -1, 1496, -1]:
 					self.poops.append(Poop([1500, -1, -1, 1496, -1].index(typ), (x,y), self.textures["poops"], self.sounds["pop"]))
 				elif typ == 1000:
@@ -194,7 +199,7 @@ class Room:
 		pass
 
 	def renderMap(self, surface, currentRoom, detail):
-		ratio = 16
+		ratio = 16 # Pixel to size ratio
 		x, y = currentRoom
 
 		if self.x == x and self.y == y:
@@ -213,6 +218,7 @@ class Room:
 			draw.rect(surface, (0,0,0), (surface.get_width()//2+(self.x-x)*ratio - 8, surface.get_height()/2-(self.y-y)*ratio - 8, 24, 24))
 			return
 
+		# Draw special symbol
 		surface.blit(texture, (surface.get_width()//2+(self.x-x)*ratio - 4, surface.get_height()/2-(self.y-y)*ratio - 4))
 		if self.variant == 1 or self.variant == 2 and not self.x == x and self.y == y:
 			surface.blit(self.textures["map"][["item", "boss"][self.variant-1]], (surface.get_width()//2+(self.x-x)*ratio - 4, surface.get_height()/2-(self.y-y)*ratio - 4))
@@ -228,10 +234,11 @@ class Room:
 			for door in self.doors:
 				door.open()
 
-			if self.hadEnemies and len(self.other) == 0 and not self.spawnedItem:
+			if self.hadEnemies and len(self.other) == 0 and randint(0,5) == 0 and not self.spawnedItem:
 				typ = randint(0,2)
 				self.spawnedItem = True
 
+				# Random spawn
 				if typ == 0:
 					self.other.append(Coin(0, (6,3), [self.sounds["coinDrop"], self.sounds["coinPickup"]], self.textures["coins"]))
 				elif typ == 1:
@@ -239,11 +246,13 @@ class Room:
 				elif typ == 2:
 					self.other.append(Key(0, (6, 3), [self.sounds["keyDrop"], self.sounds["keyPickup"]], self.textures["keys"]))
 
-
+			# Create trapdoor in empty boss room
 			if self.variant == 2 and self.floor < 6 and not Trapdoor in list(map(type, self.other)):
 				self.other.append(Trapdoor(self.textures["trapdoor"]))
 
 		if not self.animating:
+			# Render stationary room
+
 			surface.blit(self.backdrop, (38,-16))
 
 			for door in self.doors:
@@ -266,7 +275,9 @@ class Room:
 
 			everything = objects+self.other
 
+			# Character x and y
 			cx, cy = int((character.x-GRIDX)/GRATIO), int((character.y-GRIDY)/GRATIO)
+			
 			if cx != self.lcx or cy != self.lcy:
 				self.lcx, self.lcy = cx, cy
 				for enemy in self.enemies:
@@ -280,6 +291,7 @@ class Room:
 
 			return move
 		else:
+			# Render moving room
 
 			moveDistance = 40 # How far the canvas should move
 			self.ax += [0, 1, 0, -1][self.aDirection]*moveDistance

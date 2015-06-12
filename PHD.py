@@ -11,7 +11,8 @@ from const import *
 from Item import *
 
 class PHD(Item):
-
+	"""The PHD is used to allow all positive affects on pills"""
+	
 	collideable = False
 	pickedUp = False
 	

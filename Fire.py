@@ -20,6 +20,7 @@ class Fire:
 		self.sounds = sounds
 		self.textures = textures
 
+		# Random base
 		self.randVar = randint(0,2)
 
 		self.collideable = False
@@ -29,6 +30,7 @@ class Fire:
 
 		self.health = 4
 
+		# Get frames for flame
 		self.fireFrames = [self.textures[0].subsurface(Rect(96*i, 0, 96, 104)) for i in range(6)]
 
 		xMod = 0
@@ -39,11 +41,13 @@ class Fire:
 		elif self.randVar == 2:
 			yMod = 64*2
 
+		# Wood animation frames
 		self.woodFrames = [self.textures[1].subsurface(Rect((64*i - (i//2)*128)+xMod, (i//2)*64+yMod, 64, 64)) for i in range(4)]
 
 		self.fire = Animation(self.fireFrames, .4)
 		self.wood = Animation(self.woodFrames, .4)
 
+		# Define dead wood and fire frames
 		self.deadWood = self.woodFrames[1]
 		self.deadFire = Surface((0,0))
 
@@ -63,7 +67,7 @@ class Fire:
 			self.fire.resize(0.8) # Decrease flame size
 
 	def render(self, surface, time, ox=0, oy=0):
-
+		
 		if self.health > 0:
 			wood = self.wood.render(time)
 			fire = self.fire.render(time)
