@@ -70,7 +70,7 @@ def loadFloor(name, index, size, sounds, textures):
 
 
 	moves = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-	unusedRooms = [i for i in range(1, len(d))]
+	unusedRooms = [i for i in range(2, len(d))]
 	possibleCoords = moves[:]
 	rooms = [(0,0)]
 	for i in range(size-1):
@@ -95,7 +95,11 @@ def loadFloor(name, index, size, sounds, textures):
 		if room[1] == 1:
 			itemRoom = tuple(room[0])
 			break
-	floor[itemRoom] = Room(index, 1, itemRoom, d[0], textures, sounds)
+	floor[itemRoom] = Room(index, 1, itemRoom, d[1], textures, sounds)
+	if True:
+		floor[itemRoom].other.append(PHD((6,3), sounds, textures["phd"]))
+	else:
+		floor[itemRoom].other.append(Pill((6,3), textures["pills"]))
 
 	someRooms = findRooms(floor, possibleCoords, rooms)
 
@@ -163,7 +167,7 @@ def deleteSave(index):
 	except:
 		pass
 
-def write(text, font):
+def write(text, font, alph=alph):
 	width = font[0].get_width()
 	height = font[0].get_height()
 	writing = Surface((width*len(text), height)).convert_alpha()

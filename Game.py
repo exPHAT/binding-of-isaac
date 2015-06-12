@@ -5,6 +5,8 @@ from Room import *
 from Bomb import *
 from time import time as cTime
 from pause import *
+from Pill import *
+from Banner import *
 import random
 
 class Game:
@@ -16,6 +18,8 @@ class Game:
 		self.surface = surface
 		self.characterType = characterType
 		self.seed = seed
+
+		self.banners = []
 
 		random.seed(self.seed)
 
@@ -40,10 +44,12 @@ class Game:
 						room.addDoor(doorPoss[i], room.variant, True)
 					else:
 						room.addDoor(doorPoss[i], floor[coord].variant, True)
+
 				except:
 					pass
 
 		self.floor = floor
+		self.banners.append(Banner(["Basement", "Caves", "Catacombs","Necropolis","Depths","Womb","Uterus"][self.floorIndex], self.textures))
 
 	def updateMinimap(self, currentRoom):
 		self.minimap.fill((0,0,0,0))
@@ -74,6 +80,13 @@ class Game:
 		currentRoom = self.currentRoom
 
 		self.isaac = isaac = Character(self.characterType, (WIDTH//2, (HEIGHT//4)*3), [[115, 100, 119, 97], [274, 275, 273, 276]], textures, sounds, fonts)
+
+		if self.characterType == 0:
+			isaac.pill = Pill((0,0), textures["pills"])
+		elif self.characterType == 2:
+			isaac.speed = 3
+			isaac.damage = 1
+			del isaac.hearts[-1]
 
 		self.sounds = sounds
 		self.textures = textures
@@ -121,8 +134,6 @@ class Game:
 						isaac.hurt(1, 0, 0, currTime)
 					elif e.unicode == "q":
 						isaac.usePill()
-					elif e.unicode == "m":
-						print(self.seed)
 
 				elif e.type == KEYUP:
 					isaac.moving(e.key, False, False)
@@ -170,6 +181,10 @@ class Game:
 
 			# DRAW MAP
 			screen.blit(self.minimap, (MAPX-mWidth//2, MAPY-mHeight//2))
+
+			for banner in self.banners:
+				if banner.render(screen):
+					self.banners.remove(banner)
 
 			if joystick != None:
 				joystick.update()

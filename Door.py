@@ -20,6 +20,8 @@ class Door:
 		self.side = side
 		self.variant = variant
 		self.texture = texture[variant]
+		self.locked = False
+
 		if self.variant == 0:
 			if floor < 3:
 				self.texture = self.texture[0]
@@ -27,6 +29,9 @@ class Door:
 				self.texture = self.texture[1]
 			else:
 				self.texture = self.texture[2]
+		elif self.variant == 1 and floor == 1:
+			self.locked = True
+			
 		self.texture = func.darken(self.texture, .25)
 		self.sounds = sounds
 
@@ -36,10 +41,11 @@ class Door:
 
 		if variant != 3 and variant != 4:
 			# Rotate the door texture to be the correct orrientation
-			self.doorFrame = transform.rotate(self.texture.subsurface(0, 0, 64*2, 48*2), -(180 - (90*self.side)))
-			self.doorBack  = transform.rotate(self.texture.subsurface(64*2, 0, 64*2, 48*2), -(180 - (90*self.side)))
-			self.lDoor     = transform.rotate(self.texture.subsurface(0, 48*2, 64*2, 48*2), -(180 - (90*self.side)))
-			self.rDoor     = transform.rotate(self.texture.subsurface(64*2, 48*2, 64*2, 48*2), -(180 - (90*self.side)))
+			self.doorFrame  = transform.rotate(self.texture.subsurface(0, 0, 64*2, 48*2), -(180 - (90*self.side)))
+			self.doorBack   = transform.rotate(self.texture.subsurface(64*2, 0, 64*2, 48*2), -(180 - (90*self.side)))
+			self.lDoor      = transform.rotate(self.texture.subsurface(0, 48*2, 64*2, 48*2), -(180 - (90*self.side)))
+			self.rDoor      = transform.rotate(self.texture.subsurface(64*2, 48*2, 64*2, 48*2), -(180 - (90*self.side)))
+			self.lockedDoor = transform.rotate(self.texture.subsurface(64*2, 96*2, 64*2, 48*2), -(180 - (90*self.side)))
 
 		else:
 
@@ -92,6 +98,9 @@ class Door:
 		if not self.isOpen:
 			surface.blit(self.lDoor, xy)
 			surface.blit(self.rDoor, xy)
+		if self.locked:
+			surface.blit(self.lDoor, xy)
+			surface.blit(self.lockedDoor, xy)
 
 		surface.blit(self.doorFrame, xy)
 

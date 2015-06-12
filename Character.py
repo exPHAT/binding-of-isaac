@@ -174,6 +174,7 @@ class Character:
 
 	def usePill(self):
 		if self.pill != None:
+			self.pill.use(self) # Pass in the character to check for PHD
 			st = self.pill.stats # The pills statss
 			self.speed += st[0]
 			self.shotRate += st[1]
@@ -435,6 +436,9 @@ class Character:
 				elif type(ob) == Pill:
 					self.pill = ob
 					ob.pickup()
+				elif type(ob) == PHD:
+					self.items.append(ob)
+					ob.pickup()
 				elif type(ob) == Trapdoor:
 					self.game.floorIndex += 1
 					self.game.currentRoom = (0,0)
@@ -458,6 +462,18 @@ class Character:
 
 			dcx = door.rect.collidepoint(self.x+dx, self.y)
 			dcy = door.rect.collidepoint(self.x, self.y+dy)
+
+			if len(doors) == 1 and door.locked:
+				door.locked = False
+
+
+			if door.locked and self.pickups[2].score > 0 and (dcx or dcy):
+				door.locked = False
+				self.pickups[2].score -= 1
+				continue
+
+			if door.locked:
+				continue
 
 			if dcx:
 				self.x += dx
@@ -506,6 +522,9 @@ class Character:
 
 		if self.pill != None:
 			surface.blit(self.pill.texture, (WIDTH-80, HEIGHT-60))
+
+		for item in self.items:
+			item.renderCorner(surface)
 
 		# draw.rect(surface, (255,0,0), self.bodyRect)
 

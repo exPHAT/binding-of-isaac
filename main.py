@@ -121,6 +121,8 @@ textures = {
 	"arrow": loadTexture("arrow.png", dir="pause", double=False),
 	"pills": loadTexture("pills.png"),
 	"trapdoor": loadTexture("trap_door.png"),
+	"phd": loadTexture("phd.png"),
+	"streak": loadTexture("streak.png"),
 	"map": {
 		"background": loadTexture("minimap.png").subsurface(0, 0, 112, 102),
 		"in": loadTexture("minimap.png").subsurface(113, 0, 16, 16),
