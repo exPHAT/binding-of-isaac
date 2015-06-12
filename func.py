@@ -12,6 +12,7 @@ from Gurdy import *
 from Heart import *
 from PHD import *
 from Pill import *
+from Duke import *
 
 alph = "abcdefghijklmnopqrstuvwxyz0123456789 "
 
@@ -109,9 +110,9 @@ def loadFloor(name, index, size, sounds, textures):
 			break
 	floor[shop] = Room(index, 5, shop, d[2], textures, sounds)
 	things = [
-		Heart(1, (5,3), [sounds["heartIntake"], sounds["holy"]], textures["pickupHearts"]),
+		Heart(1, (4,3), [sounds["heartIntake"], sounds["holy"]], textures["pickupHearts"]),
 		Pill((6, 3), textures["pills"]),
-		PHD((7,3), sounds, textures["phd"])
+		PHD((8,3), sounds, textures["phd"])
 	]
 	for i in range(len(things)):
 		things[i].price = i*2+3
@@ -138,7 +139,7 @@ def loadFloor(name, index, size, sounds, textures):
 			bossRoom = tuple(room[0])
 			break
 	floor[bossRoom] = Room(index, 2, bossRoom, d[0], textures, sounds)
-	floor[bossRoom].enemies.append(Gurdy(textures["bosses"]["gurdy"], sounds))
+	floor[bossRoom].enemies.append([Gurdy, Duke][randint(0,1)](textures, sounds))
 
 	return floor
 

@@ -383,8 +383,8 @@ class Character:
 			sizeModifier /= 1.414213 # So there is no benefit to going diagonal (sqrt(2))
 
 		# Delta x and y
-		dx = self.xVel * sizeModifier * self.speed
-		dy = self.yVel * sizeModifier * self.speed
+		dx = self.xVel * sizeModifier * (self.speed//2+1)
+		dy = self.yVel * sizeModifier * (self.speed//2+1) 
 
 		# Ensure the tear is within the level bounds
 		inBoundsX = bounds.collidepoint(self.x+dx, self.y)

@@ -9,6 +9,7 @@
 from pygame import *
 from time import time as cTime
 from func import *
+from const import *
 
 class Banner:
 	def __init__(self, text, textures):
@@ -24,7 +25,7 @@ class Banner:
 	def draw(self, surface, text):
 		# Draw it on the surface
 		surface.blit(self.streak,(80,100))
-		surface.blit(self.drawText,(390,150))
+		surface.blit(self.drawText,(WIDTH//2 - self.drawText.get_width()//2,150))
 
 	def render(self, surface):
 		self.slide = surface.copy()

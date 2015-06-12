@@ -52,12 +52,13 @@ class Animation:
 			self.currentIndex = index
 			self.frame = self.frames[self.currentIndex]
 
-	def reset(self):
+	def reset(self, time):
 		'Reset animation to start'
 
 		# Re-set the current index and re-set the current frame
 		self.currentIndex = 0
 		self.frame = self.frames[self.currentIndex]
+		self.lastFrame = time
 
 	def step(self):
 		'Step the animation forward a frame'

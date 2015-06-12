@@ -16,6 +16,7 @@ from pause import *
 from Pill import *
 from Banner import *
 from Gurdy import *
+from Duke import *
 import random
 
 
@@ -204,7 +205,7 @@ class Game:
 							sounds["bossIntro"].play()
 
 							# Give the correct boss index
-							bossIntro(screen, self.characterType, [Gurdy].index(type(self.floor[self.currentRoom].enemies[0])), self.floorIndex)
+							bossIntro(screen, self.characterType, [Gurdy, Duke].index(type(self.floor[self.currentRoom].enemies[0])), self.floorIndex)
 
 						self.floor[self.currentRoom].entered = True
 
@@ -228,7 +229,7 @@ class Game:
 				# Its a boss room
 				try:
 					# Draw the boss bar
-					bossbar(screen, self.floor[self.currentRoom].enemies[0].health/50)
+					bossbar(screen, self.floor[self.currentRoom].enemies[0].health/100)
 				except:
 					pass
 

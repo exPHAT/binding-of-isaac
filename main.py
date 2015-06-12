@@ -148,6 +148,7 @@ textures = {
 	},
 	"bosses": {
 		"gurdy": loadTexture("gurdy.png", dir="bosses"),
+		"duke": loadTexture("duke.png", dir="bosses"),
 	}
 }
 
