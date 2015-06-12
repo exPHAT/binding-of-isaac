@@ -21,7 +21,7 @@ class Host(Enemy):
 		self.x, self.y = xy
 		self.tearTextures = textures["tears"]
 		self.tearSounds = sounds["tear"]
-		self.frames = [textures["enemies"]["host"].subsurface(i*64, 32, 128, 128) for i in range(3)]
+		self.frames = [textures["enemies"]["host"].subsurface(i*64, 0, 64, 128) for i in range(2)]
 
 		self.texture = self.frames[0]
 
@@ -63,7 +63,7 @@ class Host(Enemy):
 			if not tear.render(surface, time, bounds, obsticals):
 				self.tears.remove(tear)
 
-		surface.blit(self.texture, (GRIDX+GRATIO*self.x-16, GRIDY+GRATIO*self.y-32))
+		surface.blit(self.texture, (GRIDX+GRATIO*self.x-16, GRIDY+GRATIO*self.y-80))
 
 		return not self.dead
 

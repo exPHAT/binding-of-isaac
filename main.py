@@ -139,6 +139,7 @@ textures = {
 		"item": loadTexture("minimap.png").subsurface(113, 48, 16, 16),
 		"boss": loadTexture("minimap.png").subsurface(113, 64, 16, 16),
 	},
+	
 	"enemies": {
 		"fly": loadTexture("fly.png", dir="enemies"),
 		"pooter": loadTexture("pooter.png", dir="enemies"),

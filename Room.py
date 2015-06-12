@@ -149,6 +149,8 @@ class Room:
 					self.enemies.append(Pooter((x, y), [self.sounds["deathBurst"]], self.textures["enemies"]["pooter"]))
 				elif typ == 26:
 					self.enemies.append(Maw((x, y), [self.sounds["deathBurst"]], self.textures["enemies"]["maw"]))
+				elif typ == 27:
+					self.enemies.append(Host((x, y), self.sounds, self.textures))
 				elif typ == 30:
 					self.enemies.append(Boil((x, y), self.sounds, self.textures))
 

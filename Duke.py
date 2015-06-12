@@ -54,6 +54,12 @@ class Duke(Enemy):
 			else:
 				surface.blit(self.animation.render(time), (GRIDX+GRATIO*self.x-284/4 + 10, GRIDY+GRATIO*self.y-320/4))
 
+			dx = character.x-(GRIDX+GRATIO*self.x)
+			dy = character.y-(GRIDY+GRATIO*self.y)
+			dist = sqrt(dx**2+dy**2)
+
+			self.x += (dx/dist)/60
+			self.y += (dy/dist)/60
 		
 			if time-self.lastShot >= 3:
 				self.lastShot = time

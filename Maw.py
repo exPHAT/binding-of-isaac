@@ -12,7 +12,7 @@ from Fly import *
 
 class Maw(Fly):
 	hurtDistance = 1
-	health = 8
+	health = 12
 	isFlying = False
 
 	def __init__(self, xy, sounds, textures):

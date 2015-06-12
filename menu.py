@@ -12,6 +12,8 @@ from random import *
 from func import *
 
 def menu(screen, jController, sounds, nextSong, changeSong):
+
+	#Establishes all the variables and lists used in the menu
 	optionpoint = 0
 	edit = False
 	moves = ["Move Left","Move Right","Move Up","Move Down","Shoot Left","Shoot Right","Shoot Up","Shoot Down","Take pill","Drop Bomb"]
@@ -33,6 +35,8 @@ def menu(screen, jController, sounds, nextSong, changeSong):
 	swap = False
 	menu = "main"
 	filepoint = 0
+
+	#Loads in all the textures, scaling correctly
 
 	menuoverlay = loadTexture("menuoverlay.png", dir="menu", double=False)
 	menuoverlay2 = loadTexture("menuoverlay2.png", dir="menu", double=False)
@@ -86,6 +90,9 @@ def menu(screen, jController, sounds, nextSong, changeSong):
 		kd = key.get_pressed()
 		mx,my = mouse.get_pos()
 
+		#Keeps track of the frames for the animations
+
+
 		if (frame - frame2) > 120:           
 			spotlight += 1
 			frame2 = frame
@@ -94,6 +101,8 @@ def menu(screen, jController, sounds, nextSong, changeSong):
 		for e in event.get():
 			if e.type == QUIT:
 				running = False
+
+			#All the various button clicks are managed here
 
 			if e.type == KEYDOWN and menu == "main" and e.key == 27:
 				quit()
@@ -122,6 +131,7 @@ def menu(screen, jController, sounds, nextSong, changeSong):
 
 				controls = defaultcontrols[:]
 
+			#Sets the key clicked to the letter
 			if e.type == KEYDOWN and menu == "seed" and e.key != 8 and e.key != 27:
 				if seedletter < 8:
 					if e.unicode.lower() in alph:
@@ -132,7 +142,7 @@ def menu(screen, jController, sounds, nextSong, changeSong):
 					seedletter -= 1
 					seed[seedletter] = " "
 
-				
+			#Allows for different keys to be linked to the various controls
 			if e.type == KEYDOWN and edit == True and menu == "options" and e.key != 32 and optionpoint != 10:
 				if e.key == 273:
 					controldisplay[optionpoint] = "Up Arrow"
@@ -175,6 +185,8 @@ def menu(screen, jController, sounds, nextSong, changeSong):
 				sounds["selectLeft"].stop()
 				sounds["selectLeft"].play()
 				if char == 1:
+
+			#Controls all the menu animtions including the sliding
 					for x in range(0,100,5):
 						screen.blit(mainbackground,(-960,0))
 						screen.blit(character[1],(430-x,230-x))
@@ -241,6 +253,7 @@ def menu(screen, jController, sounds, nextSong, changeSong):
 
 			if e.type == KEYDOWN and menu == "file" and e.key == 32 and space == 0:
 				deleteSave(filepoint)
+			#Ensures selections loop in a circle
 
 			if space > 1:
 				space = 0
@@ -407,6 +420,8 @@ def menu(screen, jController, sounds, nextSong, changeSong):
 				continue
 
 		if menu == "main":
+
+			#Adjusts the rotation of the main title
 			if degrees < -1:
 				increase *= -1
 			elif degrees > 0:
@@ -421,6 +436,7 @@ def menu(screen, jController, sounds, nextSong, changeSong):
 			
 		elif menu == "file":
 			screen.blit(mainbackground,(0,-540)) 
+			#controls the raise of the file menus
 			if filepoint == 0:
 				total1 -= 5
 				screen.blit(file[0],(-20,total1))
