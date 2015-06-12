@@ -1,8 +1,9 @@
 from pygame import *
 from const import *
 from Animation import *
+from Item import *
 
-class Coin:
+class Coin(Item):
 	"""Pickup coin class"""
 
 	def __init__(self, variant, xy, sounds, textures):
@@ -11,7 +12,6 @@ class Coin:
 		self.y = xy[1]
 		self.sounds = sounds
 		self.textures = textures[variant]
-
 		self.worth = [1, 5, 10][variant]
 
 		self.bounds = Rect(GRIDX+GRATIO*self.x,GRIDY+GRATIO*self.y, 52, 52)

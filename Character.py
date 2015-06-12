@@ -55,6 +55,9 @@ class Character:
 
 		self.pickups = [Pickup(i, textures["pickups"], fonts["pickups"]) for i in range(3)] # Keys, Bombs, Coins
 
+		self.pickups[0].score += 5
+		self.pickups[0].updateDigits()
+
 		for frame in self.feet[0]:
 			self.feet[2].append(frame)
 
@@ -417,28 +420,33 @@ class Character:
 					self.pickups[0].add(ob.worth)
 					ob.pickup()
 				elif type(ob) == Key:
-					self.pickups[2].add(1)
-					ob.pickup()
+					if self.pickups[0].use(ob.price):
+						self.pickups[2].add(1)
+						ob.pickup()
 				elif type(ob) == Bomb and not ob.shouldExplode:
-					self.pickups[1].add(1)
-					ob.pickup()
+					if self.pickups[0].use(ob.price):
+						self.pickups[1].add(1)
+						ob.pickup()
 				elif type(ob) == Heart:
-					amm = self.heal(ob.health, ob.variant)
-					if amm == 0:
-						self.hearts.append(UIHeart(ob.variant, ob.health, self.heartTextures))
-					elif type(amm) == int:
-						self.hearts.append(UIHeart(ob.variant, amm, self.heartTextures))
-					ob.pickup()
+					if self.pickups[0].use(ob.price):
+						amm = self.heal(ob.health, ob.variant)
+						if amm == 0:
+							self.hearts.append(UIHeart(ob.variant, ob.health, self.heartTextures))
+						elif type(amm) == int:
+							self.hearts.append(UIHeart(ob.variant, amm, self.heartTextures))
+						ob.pickup()
 
-					if ob.variant == 1: # Sould heart
-						self.specialFrame = 1
-						self.lastPickup = time
+						if ob.variant == 1: # Sould heart
+							self.specialFrame = 1
+							self.lastPickup = time
 				elif type(ob) == Pill:
-					self.pill = ob
-					ob.pickup()
+					if self.pickups[0].use(ob.price):
+						self.pill = ob
+						ob.pickup()
 				elif type(ob) == PHD:
-					self.items.append(ob)
-					ob.pickup()
+					if self.pickups[0].use(ob.price):
+						self.items.append(ob)
+						ob.pickup()
 				elif type(ob) == Trapdoor:
 					self.game.floorIndex += 1
 					self.game.currentRoom = (0,0)

@@ -37,7 +37,7 @@ class Pickup:
 	def use(self, ammount):
 		self.score -= ammount
 		if self.score < 0:
-			self.score = 0
+			self.score += ammount
 
 			self.updateDigits()
 			return False

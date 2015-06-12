@@ -1,6 +1,7 @@
 from pygame import *
 from const import *
 from Animation import *
+import func
 
 class Item:
 	"""Main item class"""
@@ -10,6 +11,7 @@ class Item:
 
 	tWidth = 32
 	tHeight = 64
+	price = 0
 
 	def __init__(self, xy, sounds, textures):
 		self.x = xy[0]
@@ -21,6 +23,8 @@ class Item:
 
 		self.texture = self.textures.subsurface(0, 0, self.tWidth, self.tHeight)
 
+		self.digits = func.loadCFont("main.png", 20, 16, 36, size=1.8)
+
 	def pickup(self):
 		self.pickedUp = True
 		# self.sounds[1].play()
@@ -29,6 +33,9 @@ class Item:
 		surface.blit(self.texture, (30, HEIGHT-64))
 
 	def render(self, surface, time, objects, ox=0, oy=0):
+
 		if not self.pickedUp:
 			surface.blit(self.texture, (GRIDX+GRATIO*self.x+ox-self.tWidth//4,GRIDY+GRATIO*self.y+oy-self.tHeight//4))
+			if self.price != 0:
+				surface.blit(func.write(str(self.price), self.digits), (GRIDX+GRATIO*self.x+ox-5,GRIDY+GRATIO*self.y+oy+35))
 		return not self.pickedUp

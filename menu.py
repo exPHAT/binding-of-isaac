@@ -2,7 +2,6 @@ from pygame import *
 from math import *
 from random import *
 from func import *
-import os
 
 def menu(screen, jController, sounds, nextSong, changeSong):
 	optionpoint = 0

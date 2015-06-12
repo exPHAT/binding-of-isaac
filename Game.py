@@ -7,7 +7,9 @@ from time import time as cTime
 from pause import *
 from Pill import *
 from Banner import *
+from Gurdy import *
 import random
+
 
 class Game:
 	floor = {}
@@ -162,6 +164,10 @@ class Game:
 
 						isaac.clearTears()
 
+						if self.floor[self.currentRoom].variant == 2 and not self.floor[self.currentRoom].entered:
+							sounds["bossIntro"].play()
+							bossIntro(screen, self.characterType, [Gurdy].index(type(self.floor[self.currentRoom].enemies[0])), self.floorIndex)
+
 						self.floor[self.currentRoom].entered = True
 
 						for m in posMoves:
@@ -176,8 +182,16 @@ class Game:
 
 						self.updateMinimap(self.currentRoom)
 
-					except:
+					except Exception as e:
+						print(e)
 						self.currentRoom = old
+
+			if self.floor[self.currentRoom].variant == 2:
+				# Its a boss room
+				try:
+					bossbar(screen, self.floor[self.currentRoom].enemies[0].health/30)
+				except:
+					pass
 
 			# DRAW MAP
 			screen.blit(self.minimap, (MAPX-mWidth//2, MAPY-mHeight//2))

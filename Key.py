@@ -1,8 +1,9 @@
 from pygame import *
 from const import *
 from Animation import *
+from Item import *
 
-class Key:
+class Key(Item):
 	"""Pickup Key class"""
 
 	collideable = False

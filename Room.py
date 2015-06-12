@@ -31,6 +31,7 @@ class Room:
 	# 2 - Boss room
 	# 3 - Devil room
 	# 4 - Angel room
+	# 5 - Shop
 
 	# ROOMS ARE 13 x 7
 
@@ -42,7 +43,11 @@ class Room:
 		if variant == 2:
 			offX, offY = 234*2, 156*2
 
-		texture = textures["floors"][floor].subsurface(Rect(offX, offY, 221*2, 143*2))
+		if variant == 5:
+			texture = textures["floors"][-1].subsurface(Rect(offX, offY, 221*2, 143*2))
+		else:
+			texture = textures["floors"][floor].subsurface(Rect(offX, offY, 221*2, 143*2))
+
 		backdrop = Surface((221*2*2, 143*2*2))
 
 
@@ -95,6 +100,8 @@ class Room:
 
 		graph, self.nodes = make_graph({"width": 13, "height": 7, "obstacle": obsticals})
 		self.paths = AStarGrid(graph)
+		self.hadEnemies = len(self.enemies) > 0
+		self.spawnedItem = False
 
 	def parseRoomXML(self, xml):
 		self.w, self.h = map(int, [xml.get('width'), xml.get('height')])
@@ -185,7 +192,7 @@ class Room:
 			# Isaac is in this room
 			texture = self.textures["map"]["in"]
 		elif self.entered:
-			# Isaac has entered this room
+			# Isaac has  this room
 			texture = self.textures["map"]["entered"]
 		elif self.seen:
 			# Isaac has seen the door to the room
@@ -203,12 +210,26 @@ class Room:
 
 
 	def render(self, surface, character, currTime):
+
 		if len(self.enemies) > 0:
 			for door in self.doors:
 				door.close()
+
 		else:
 			for door in self.doors:
 				door.open()
+
+			if self.hadEnemies and len(self.other) == 0 and not self.spawnedItem:
+				typ = randint(0,2)
+				self.spawnedItem = True
+
+				if typ == 0:
+					self.other.append(Coin(0, (6,3), [self.sounds["coinDrop"], self.sounds["coinPickup"]], self.textures["coins"]))
+				elif typ == 1:
+					self.other.append(Bomb(self, 1, (6,3), [self.sounds["explosion"]], self.textures["bombs"], explode=False))
+				elif typ == 2:
+					self.other.append(Key(0, (6, 3), [self.sounds["keyDrop"], self.sounds["keyPickup"]], self.textures["keys"]))
+
 
 			if self.variant == 2 and self.floor < 6 and not Trapdoor in list(map(type, self.other)):
 				self.other.append(Trapdoor(self.textures["trapdoor"]))

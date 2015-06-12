@@ -13,13 +13,17 @@ class Door:
 	# 2 - Boss door
 	# 3 - Devil door
 	# 4 - Angel door
+	# 5 - Shop
 
 	# ROOMS ARE 13 x 7
 
 	def __init__(self, floor, side, variant, isOpen, texture, sounds):
 		self.side = side
 		self.variant = variant
-		self.texture = texture[variant]
+		if variant == 5:
+			self.texture = texture[0][0]
+		else:
+			self.texture = texture[variant]
 		self.locked = False
 
 		if self.variant == 0:
@@ -29,7 +33,7 @@ class Door:
 				self.texture = self.texture[1]
 			else:
 				self.texture = self.texture[2]
-		elif self.variant == 1 and floor == 1:
+		elif (self.variant == 1 and floor == 1) or self.variant == 5:
 			self.locked = True
 			
 		self.texture = func.darken(self.texture, .25)

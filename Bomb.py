@@ -4,8 +4,9 @@ from random import randint
 from math import *
 from Explosion import *
 from Animation import *
+from Item import *
 
-class Bomb:
+class Bomb(Item):
 	"""Droppable bomb class"""
 
 	collideable = False
@@ -46,7 +47,6 @@ class Bomb:
 	def pickup(self):
 		if not self.shouldExplode:
 			self.pickedUp = True
-			self.sounds[0].play()
 
 
 	def render(self, surface, time, objects, ox=0, oy=0):

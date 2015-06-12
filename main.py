@@ -97,6 +97,7 @@ textures = {
 			loadTexture("necropolis.png"),
 			loadTexture("womb.png"),
 			loadTexture("utero.png"),
+			loadTexture("shop.png"),
 			],
 	"controls": loadTexture("controls.png"),
 	"doors": [[loadTexture("door.png"), loadTexture("dark_door.png"), loadTexture("red_door.png")],
@@ -168,6 +169,7 @@ sounds = {
 	"error": loadSound("error.wav"),
 	"selectLeft": loadSound("selectLeft.wav"),
 	"selectRight": loadSound("selectRight.wav"),
+	"bossIntro": loadSound("bossIntro.wav"),
 }
 
 # Load fonts
