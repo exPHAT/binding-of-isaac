@@ -25,6 +25,7 @@ class Game:
 	floorIndex = 0
 	currentRoom = (0,0)
 	animatingRooms = []
+	won = False
 	def __init__(self, characterType, controls, seed):
 		self.surface = surface
 		self.characterType = characterType
@@ -221,7 +222,7 @@ class Game:
 
 						self.updateMinimap(self.currentRoom)
 
-					except e:
+					except:
 						# That room doesnt exist
 						self.currentRoom = old
 
@@ -232,6 +233,11 @@ class Game:
 					bossbar(screen, self.floor[self.currentRoom].enemies[0].health/100)
 				except:
 					pass
+
+				if not self.won and self.floorIndex == 6 and len(self.floor[self.currentRoom].enemies) == 0:
+					self.banners.append(Banner("You won", self.textures))
+					self.won = True
+
 
 			# DRAW MAP
 			screen.blit(self.minimap, (MAPX-mWidth//2, MAPY-mHeight//2))

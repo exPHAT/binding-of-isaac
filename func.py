@@ -213,7 +213,7 @@ def write(text, font, alph=alph, dark=.8):
 # BOSS INTRO
 
 face = [None,None,None]
-spot = [None,None,None,None,None,None]
+spot = [None,None,None,None,None,None,None]
 title = [None,None,None]
 bosstitle = [None,None,None]
 bossface = [None,None,None]
@@ -225,6 +225,7 @@ spot[2] = loadTexture("spot3.png", dir="bossIntro")
 spot[3] = loadTexture("spot4.png", dir="bossIntro")
 spot[4] = loadTexture("spot5.png", dir="bossIntro")
 spot[5] = loadTexture("spot6.png", dir="bossIntro")
+spot[6] = loadTexture("spot7.png", dir="bossIntro")
 bossspot = loadTexture("bossspot.png", dir="bossIntro")
 face[1] = loadTexture("issacportrait.png", dir="bossIntro")
 face[2] = loadTexture("eveportrait.png", dir="bossIntro")

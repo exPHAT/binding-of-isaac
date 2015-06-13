@@ -3,7 +3,7 @@
 # Moose Abumeeiz
 #
 # The main file for our final project. This is a replica of
-# the popular game The Binding of Isaac: Rebirth.
+# the popular game The Binding waof Isaac: Rebirth.
 # 
 
 from const import *
